@@ -5,26 +5,26 @@ import java.util.UUID;
 
 public class RaceRegistration extends Entity<UUID>
 {
-    private final UUID raceId;
-    private final UUID racerId;
+    private final Race race;
+    private final Racer racer;
     private final int raceClass;
 
-    public RaceRegistration(UUID id, UUID raceId, UUID racerId, int raceClass)
+    public RaceRegistration(UUID uuid, Race race, Racer racer, int raceClass)
     {
-        super(id);
-        this.raceId = raceId;
-        this.racerId = racerId;
+        super(uuid);
+        this.race = race;
+        this.racer = racer;
         this.raceClass = raceClass;
     }
 
-    public UUID getRaceId()
+    public Race getRace()
     {
-        return raceId;
+        return race;
     }
 
-    public UUID getRacerId()
+    public Racer getRacer()
     {
-        return racerId;
+        return racer;
     }
 
     public int getRaceClass()
@@ -38,12 +38,12 @@ public class RaceRegistration extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         RaceRegistration that = (RaceRegistration) o;
-        return raceClass == that.raceClass && Objects.equals(raceId, that.raceId) && Objects.equals(racerId, that.racerId);
+        return raceClass == that.raceClass && Objects.equals(race, that.race) && Objects.equals(racer, that.racer);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(raceId, racerId, raceClass);
+        return Objects.hash(race, racer, raceClass);
     }
 }
