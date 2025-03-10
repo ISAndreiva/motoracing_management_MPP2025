@@ -3,7 +3,7 @@ package internal.andreiva.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Racer extends Entity
+public class Racer extends Entity<UUID>
 {
     private final String name;
     private UUID teamId;

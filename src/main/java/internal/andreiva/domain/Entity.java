@@ -1,17 +1,15 @@
 package internal.andreiva.domain;
 
-import java.util.UUID;
-
-public class Entity
+public class Entity<Id>
 {
-    private final UUID id;
+    private final Id id;
 
-    public Entity(UUID id)
+    public Entity(Id id)
     {
         this.id = id;
     }
 
-    public UUID getId()
+    public Id getId()
     {
         return id;
     }

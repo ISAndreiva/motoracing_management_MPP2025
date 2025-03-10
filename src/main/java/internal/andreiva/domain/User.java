@@ -3,7 +3,7 @@ package internal.andreiva.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User extends Entity
+public class User extends Entity<UUID>
 {
     private final String username;
     private final String passwordHash;

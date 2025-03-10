@@ -4,11 +4,11 @@ import internal.andreiva.domain.Entity;
 
 import java.util.UUID;
 
-public interface RepositoryInterface<E extends Entity>
+public interface RepositoryInterface<Id ,E extends Entity<Id>>
 {
     void add(E entity);
 
-    E get(UUID id);
+    E get(Id id);
 
     Iterable<E> getAll();
 
