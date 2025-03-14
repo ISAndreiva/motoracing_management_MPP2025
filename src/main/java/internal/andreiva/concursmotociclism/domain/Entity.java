@@ -1,4 +1,4 @@
-package internal.andreiva.domain;
+package internal.andreiva.concursmotociclism.domain;
 
 public class Entity<Id>
 {

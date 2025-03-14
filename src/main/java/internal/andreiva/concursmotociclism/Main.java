@@ -1,4 +1,4 @@
-package internal.andreiva;
+package internal.andreiva.concursmotociclism;
 
 public class Main
 {

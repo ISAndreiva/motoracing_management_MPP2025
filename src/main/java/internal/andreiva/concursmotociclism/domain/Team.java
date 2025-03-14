@@ -1,9 +1,9 @@
-package internal.andreiva.domain;
+package internal.andreiva.concursmotociclism.domain;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class Team extends Entity<UUID>
+public class Team extends internal.andreiva.concursmotociclism.domain.Entity<UUID>
 {
     private final String name;
 

@@ -1,6 +1,6 @@
-package internal.andreiva.repository;
+package internal.andreiva.concursmotociclism.repository;
 
-import internal.andreiva.domain.Entity;
+import internal.andreiva.concursmotociclism.domain.Entity;
 
 import java.util.UUID;
 
