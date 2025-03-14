@@ -6,14 +6,14 @@ import java.util.UUID;
 public class Racer extends Entity<UUID>
 {
     private final String name;
-    private UUID teamId;
+    private Team team;
     private final String CNP;
 
-    public Racer(UUID id, String name, UUID teamId, String CNP)
+    public Racer(UUID id, String name, Team team, String CNP)
     {
         super(id);
         this.name = name;
-        this.teamId = teamId;
+        this.team = team;
         this.CNP = CNP;
     }
 
@@ -22,9 +22,9 @@ public class Racer extends Entity<UUID>
         return name;
     }
 
-    public UUID getTeamId()
+    public Team getTeam()
     {
-        return teamId;
+        return team;
     }
 
     public String getCNP()
@@ -32,9 +32,9 @@ public class Racer extends Entity<UUID>
         return CNP;
     }
 
-    public void setTeamId(UUID teamId)
+    public void setTeam(Team team)
     {
-        this.teamId = teamId;
+        this.team = team;
     }
 
     @Override
@@ -43,12 +43,12 @@ public class Racer extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         Racer racer = (Racer) o;
-        return Objects.equals(name, racer.name) && Objects.equals(teamId, racer.teamId) && Objects.equals(CNP, racer.CNP);
+        return Objects.equals(name, racer.name) && Objects.equals(team, racer.team) && Objects.equals(CNP, racer.CNP);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(name, teamId, CNP);
+        return Objects.hash(name, team, CNP);
     }
 }
