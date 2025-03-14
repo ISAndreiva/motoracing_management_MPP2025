@@ -31,7 +31,7 @@ public class User extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(passwordHash, user.passwordHash);
+        return Objects.equals(username, user.username) && Objects.equals(passwordHash, user.passwordHash) && Objects.equals(super.getId(), user.getId());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class Team extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         Team team = (Team) o;
-        return Objects.equals(name, team.name);
+        return Objects.equals(name, team.name) && Objects.equals(super.getId(), team.getId());
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Race extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         Race race = (Race) o;
-        return raceClass == race.raceClass && Objects.equals(raceName, race.raceName);
+        return raceClass == race.raceClass && Objects.equals(raceName, race.raceName) && Objects.equals(super.getId(), race.getId());
     }
 
     @Override

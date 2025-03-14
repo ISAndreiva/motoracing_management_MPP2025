@@ -43,7 +43,7 @@ public class Racer extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         Racer racer = (Racer) o;
-        return Objects.equals(name, racer.name) && Objects.equals(team, racer.team) && Objects.equals(CNP, racer.CNP);
+        return Objects.equals(name, racer.name) && Objects.equals(team, racer.team) && Objects.equals(CNP, racer.CNP) && Objects.equals(super.getId(), racer.getId());
     }
 
     @Override

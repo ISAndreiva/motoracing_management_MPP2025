@@ -38,7 +38,7 @@ public class RaceRegistration extends Entity<UUID>
         if (o == null || getClass() != o.getClass())
             return false;
         RaceRegistration that = (RaceRegistration) o;
-        return raceClass == that.raceClass && Objects.equals(race, that.race) && Objects.equals(racer, that.racer);
+        return raceClass == that.raceClass && Objects.equals(race, that.race) && Objects.equals(racer, that.racer) && Objects.equals(super.getId(), that.getId());
     }
 
     @Override
