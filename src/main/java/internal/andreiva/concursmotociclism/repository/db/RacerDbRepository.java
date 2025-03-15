@@ -67,7 +67,6 @@ public class RacerDbRepository extends AbstractDbRepository<UUID, Racer> impleme
     @Override
     public Iterable<Racer> getRacersByTeam(UUID teamId)
     {
-        String sql = "SELECT * FROM racer WHERE team = ?";
-        return super.sqlToArray(sql, teamId);
+        return super.getEntitiesByField("team", teamId);
     }
 }

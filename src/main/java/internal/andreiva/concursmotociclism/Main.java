@@ -52,10 +52,9 @@ public class Main
         var teams = teamDbRepository.getAll();
 
         System.out.println("Teams:");
-        for (var e : racerDbRepository.getRacersByTeam(UUID.fromString("2c1cb029-c538-4ca6-be6d-e7473ab1818f")))
+        for (var e : raceDbRepository.getRacesByClass(250))
         {
-            System.out.println(e.getName());
-            System.out.println(e.getTeam().getName());
+            System.out.println(e.getRaceName());
         }
 
 

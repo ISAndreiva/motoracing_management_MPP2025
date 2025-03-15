@@ -26,15 +26,20 @@ public abstract class AbstractDbRepository<Id, E extends Entity<Id>> implements 
 
     protected abstract E resultToEntity(ResultSet rs) throws SQLException;
 
-    protected Iterable<E> sqlToArray(String sql, Id id)
+    protected Iterable<E> getEntitiesByField(String fieldName, Object fieldValue)
     {
+        String sql;
+        if (fieldValue == null)
+            sql = "SELECT * FROM " + tableName;
+        else
+            sql = "SELECT * FROM " + tableName + " WHERE " + fieldName + " = ?";
         var array = new ArrayList<E>();
         try
         {
             var connection = jdbcUtils.getConnection();
             var preparedStatement = connection.prepareStatement(sql);
-            if (id != null)
-                preparedStatement.setString(1, id.toString());
+            if (fieldName != null)
+                preparedStatement.setObject(1, fieldValue);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
@@ -79,8 +84,7 @@ public abstract class AbstractDbRepository<Id, E extends Entity<Id>> implements 
     @Override
     public Iterable<E> getAll()
     {
-        String sql = "SELECT * FROM " + tableName;
-        return sqlToArray(sql, null);
+        return getEntitiesByField(null, null);
     }
 
     @Override

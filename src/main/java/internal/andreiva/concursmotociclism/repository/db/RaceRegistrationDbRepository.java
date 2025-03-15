@@ -67,14 +67,12 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
     @Override
     public Iterable<RaceRegistration> getRegistrationsByRace(UUID raceId)
     {
-        String sql = "SELECT * FROM raceregistration WHERE race = ?";
-        return super.sqlToArray(sql, raceId);
+        return super.getEntitiesByField("race", raceId);
     }
 
     @Override
     public Iterable<RaceRegistration> getRegistrationsByRacer(UUID racerId)
     {
-        String sql = "SELECT * FROM raceregistration WHERE racer = ?";
-        return super.sqlToArray(sql, racerId);
+        return super.getEntitiesByField("racer", racerId);
     }
 }
