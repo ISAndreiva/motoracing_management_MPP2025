@@ -1,13 +1,14 @@
 package internal.andreiva.concursmotociclism.repository.db;
 
 import internal.andreiva.concursmotociclism.domain.User;
+import internal.andreiva.concursmotociclism.repository.UserRepositoryInterface;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
-public class UserDbRepository extends AbstractDbRepository<UUID, User>
+public class UserDbRepository extends AbstractDbRepository<UUID, User> implements UserRepositoryInterface
 {
     public UserDbRepository(Properties properties)
     {
@@ -21,8 +22,16 @@ public class UserDbRepository extends AbstractDbRepository<UUID, User>
     }
 
     @Override
+    public User get(UUID uuid)
+    {
+        return super.get(uuid, "uuid");
+    }
+
+    @Override
     public void add(User entity)
     {
+        logger.traceEntry();
+        logger.info("Adding user to database");
         String sql = "INSERT INTO user (uuid, username, password_hash) VALUES (?, ?, ?)";
         try
         {
@@ -41,6 +50,8 @@ public class UserDbRepository extends AbstractDbRepository<UUID, User>
     @Override
     public void update(User entity)
     {
+        logger.traceEntry();
+        logger.info("Updating user with id:" + entity.getId());
         String sql = "UPDATE user SET username=?, password_hash=? WHERE uuid=?";
         try
         {

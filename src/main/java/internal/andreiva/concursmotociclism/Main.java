@@ -5,7 +5,6 @@ import internal.andreiva.concursmotociclism.repository.db.*;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.UUID;
 
 public class Main
 {
@@ -14,7 +13,7 @@ public class Main
         var properties = new Properties();
         try
         {
-            properties.load(new FileReader("src/main/resources/concursmotociclism/db.properties"));
+            properties.load(new FileReader("db.properties"));
         } catch (IOException e)
         {
             throw new RuntimeException(e);
@@ -34,8 +33,8 @@ public class Main
         var userDbRepository = new UserDbRepository(properties);
         var teamDbRepository = new TeamDbRepository(properties);
         var raceDbRepository = new RaceDbRepository(properties);
-        var racerDbRepository = new RacerDbRepository(properties);
-        var raceRegistrationDbRepository = new RaceRegistrationDbRepository(properties);
+        var racerDbRepository = new RacerDbRepository(properties, teamDbRepository);
+        var raceRegistrationDbRepository = new RaceRegistrationDbRepository(properties, racerDbRepository, raceDbRepository);
 
 //        userDbRepository.add(user1);
 //        userDbRepository.add(user2);
@@ -48,8 +47,8 @@ public class Main
 //        raceRegistrationDbRepository.add(raceRegistration1);
 //        raceRegistrationDbRepository.add(raceRegistration2);
 
-        var users = userDbRepository.getAll();
-        var teams = teamDbRepository.getAll();
+        //var users = userDbRepository.getAll();
+        //var teams = teamDbRepository.getAll();
 
         System.out.println("Teams:");
         for (var e : raceDbRepository.getRacesByClass(250))

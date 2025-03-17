@@ -26,6 +26,8 @@ public class RaceDbRepository extends AbstractDbRepository<UUID, Race> implement
     @Override
     public void add(Race entity)
     {
+        logger.traceEntry();
+        logger.info("Adding new Race to database");
         String sql = "INSERT INTO race (uuid, name, class) VALUES (?, ?, ?)";
         try
         {
@@ -44,6 +46,8 @@ public class RaceDbRepository extends AbstractDbRepository<UUID, Race> implement
     @Override
     public void update(Race entity)
     {
+        logger.traceEntry();
+        logger.info("Updating Race with id:" + entity.getId());
         String sql = "UPDATE race SET name = ?, class = ? WHERE uuid = ?";
         try
         {
@@ -60,8 +64,16 @@ public class RaceDbRepository extends AbstractDbRepository<UUID, Race> implement
     }
 
     @Override
+    public Race get(UUID uuid)
+    {
+        return super.get(uuid, "uuid");
+    }
+
+    @Override
     public Iterable<Race> getRacesByClass(int raceClass)
     {
+        logger.traceEntry();
+        logger.info("Getting Races by class " + raceClass);
         String sql = "SELECT * from race WHERE class = ?";
         var array = new ArrayList<Race>();
         try

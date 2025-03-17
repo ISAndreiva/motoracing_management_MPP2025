@@ -1,13 +1,14 @@
 package internal.andreiva.concursmotociclism.repository.db;
 
 import internal.andreiva.concursmotociclism.domain.Team;
+import internal.andreiva.concursmotociclism.repository.TeamRepositoryInterface;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
-public class TeamDbRepository extends AbstractDbRepository<UUID, Team>
+public class TeamDbRepository extends AbstractDbRepository<UUID, Team> implements TeamRepositoryInterface
 {
     public TeamDbRepository(Properties properties)
     {
@@ -21,8 +22,16 @@ public class TeamDbRepository extends AbstractDbRepository<UUID, Team>
     }
 
     @Override
+    public Team get(UUID uuid)
+    {
+        return super.get(uuid, "uuid");
+    }
+
+    @Override
     public void add(Team entity)
     {
+        logger.traceEntry();
+        logger.info("Adding team to database");
         String sql = "INSERT INTO team VALUES(?, ?)";
         try
         {
@@ -40,6 +49,8 @@ public class TeamDbRepository extends AbstractDbRepository<UUID, Team>
     @Override
     public void update(Team entity)
     {
+        logger.traceEntry();
+        logger.info("Updating team with id:" + entity.getId());
         String sql = "UPDATE team SET name = ? WHERE uuid = ?";
         try
         {

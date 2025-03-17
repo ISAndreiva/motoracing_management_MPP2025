@@ -2,6 +2,8 @@ package internal.andreiva.concursmotociclism.repository.db;
 
 import internal.andreiva.concursmotociclism.domain.RaceRegistration;
 import internal.andreiva.concursmotociclism.repository.RaceRegistrationRepositoryInterface;
+import internal.andreiva.concursmotociclism.repository.RaceRepositoryInterface;
+import internal.andreiva.concursmotociclism.repository.RacerRepositoryInterface;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,25 +12,35 @@ import java.util.UUID;
 
 public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, RaceRegistration> implements RaceRegistrationRepositoryInterface
 {
-    Properties properties;
+    private final RacerRepositoryInterface racerRepository;
+    private final RaceRepositoryInterface raceRepository;
 
-    public RaceRegistrationDbRepository(Properties properties)
+    public RaceRegistrationDbRepository(Properties properties, RacerRepositoryInterface racerRepository, RaceRepositoryInterface raceRepository)
     {
         super(properties, "raceregistration");
-        this.properties = properties;
+        this.racerRepository = racerRepository;
+        this.raceRepository = raceRepository;
+    }
+
+    @Override
+    public RaceRegistration get(UUID uuid)
+    {
+        return super.get(uuid, "uuid");
     }
 
     @Override
     protected RaceRegistration resultToEntity(ResultSet rs) throws SQLException
     {
-        var racer = new RacerDbRepository(properties).get(UUID.fromString(rs.getString("racer")));
-        var race = new RaceDbRepository(properties).get(UUID.fromString(rs.getString("race")));
+        var racer = racerRepository.get(UUID.fromString(rs.getString("racer")));
+        var race = raceRepository.get(UUID.fromString(rs.getString("race")));
         return new RaceRegistration(UUID.fromString(rs.getString("uuid")), race, racer, rs.getInt("class"));
     }
 
     @Override
     public void add(RaceRegistration entity)
     {
+        logger.traceEntry();
+        logger.info("Adding new RaceRegistration to database");
         String sql = "INSERT INTO raceregistration(uuid, race, racer, class) VALUES (?, ?, ?, ?)";
         try
         {
@@ -48,6 +60,8 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
     @Override
     public void update(RaceRegistration entity)
     {
+        logger.traceEntry();
+        logger.info("Updating RaceRegistration with id:" + entity.getId());
         String sql = "UPDATE raceregistration SET race = ?, racer = ?, class = ? WHERE uuid = ?";
         try
         {
