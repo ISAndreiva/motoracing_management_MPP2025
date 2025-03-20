@@ -1,0 +1,81 @@
+package internal.andreiva.concursmotociclism.gui;
+
+import internal.andreiva.concursmotociclism.service.Service;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
+import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+
+public class GuiViewFactory extends Application
+{
+    private static Service service;
+    private static Stage stage;
+    protected final static Logger logger = LogManager.getLogger();
+    public static void setService(Service service)
+    {
+        GuiViewFactory.service = service;
+    }
+
+    public static void launch()
+    {
+        Application.launch();
+    }
+
+    @Override
+    public void start(Stage stage)
+    {
+        GuiViewFactory.stage = stage;
+        loginView();
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    public static void loginView()
+    {
+        stage.setScene(createScene("concursmotociclism/gui/loginView.fxml", null, null));
+        stage.setTitle("Concurs Motociclism");
+        stage.show();
+    }
+
+    public static void adminView()
+    {
+        Stage stage = new Stage();
+        stage.setScene(createScene("concursmotociclism/gui/adminView.fxml", null, null));
+        stage.setTitle("Concurs Motociclism");
+        stage.show();
+    }
+
+    private static Scene createScene(String fxml, String css, Object parameter)
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(GuiViewFactory.class.getClassLoader().getResource(fxml));
+        try
+        {
+            AnchorPane root = fxmlLoader.load();
+            AbstractGuiController<Object> controller = fxmlLoader.getController();
+            controller.setSomething(parameter);
+            controller.setService(service);
+            double scaleValue = 1.25;
+            Scale scale = new Scale(scaleValue, scaleValue);
+            root.getTransforms().add(scale);
+            root.setPrefHeight(root.getPrefHeight()*scaleValue);
+            root.setPrefWidth(root.getPrefWidth()*scaleValue);
+            Scene scene = new Scene(root);
+            if (css != null)
+            {
+                scene.getStylesheets().add(GuiViewFactory.class.getClassLoader().getResource(css).toExternalForm());
+            }
+            return scene;
+        }
+        catch (IOException e)
+        {
+            logger.error(e);
+            return null;
+        }
+    }
+}

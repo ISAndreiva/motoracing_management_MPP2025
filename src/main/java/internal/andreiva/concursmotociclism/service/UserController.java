@@ -17,4 +17,9 @@ public class UserController
         var hash = userRepository.getUserByUsername(username).getPasswordHash();
         return hash.equals(passwordHash);
     }
+
+    public boolean checkUserExists(String username)
+    {
+        return userRepository.getUserByUsername(username) != null;
+    }
 }

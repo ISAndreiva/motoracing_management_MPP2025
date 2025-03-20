@@ -2,6 +2,8 @@ package internal.andreiva.concursmotociclism.service;
 
 import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.repository.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ public class Service
     private final RaceController raceController;
     private final RacerController racerController;
     private final RaceRegistrationController raceRegistrationController;
+    protected final static Logger logger = LogManager.getLogger();
 
     public Service(UserRepositoryInterface userRepository, TeamRepositoryInterface teamRepository, RaceRepositoryInterface raceRepository, RacerRepositoryInterface racerRepository, RaceRegistrationRepositoryInterface raceRegistrationRepository)
     {
@@ -24,22 +27,32 @@ public class Service
 
     public boolean checkUserPassword(String username, String password)
     {
+        logger.info("Checking password for user: {}", username);
         return userController.checkPassword(username, password);
     }
 
     public Iterable<Race> getRacesByClass(int raceClass)
     {
+        logger.info("Getting races by class: {}", raceClass);
         return raceController.getRacesByClass(raceClass);
     }
 
     public Iterable<Integer> getRaceClasses()
     {
+        logger.info("Getting all race classes");
         return raceController.getRaceClasses();
     }
 
     public int getRacersCountForRace(UUID raceId)
     {
+        logger.info("Getting number of racers registered for race {}", raceId);
         return raceRegistrationController.getNumberOfRacersRegisteredForRace(raceId);
+    }
+
+    public boolean checkUserExists(String username)
+    {
+        logger.info("Checking if user exists: {}", username);
+        return userController.checkUserExists(username);
     }
 
 }

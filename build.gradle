@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.beryx.jlink' version '2.25.0'
 }
 
 group = 'internal.andreiva'
@@ -16,6 +18,11 @@ dependencies {
 
     implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
     runtimeOnly 'org.xerial:sqlite-jdbc:3.49.1.0'
+}
+
+javafx {
+    version = "21.0.2"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 application {

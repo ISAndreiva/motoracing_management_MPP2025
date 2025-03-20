@@ -1,5 +1,6 @@
 package internal.andreiva.concursmotociclism.service;
 
+import internal.andreiva.concursmotociclism.domain.RaceRegistration;
 import internal.andreiva.concursmotociclism.repository.RaceRegistrationRepositoryInterface;
 
 import java.util.UUID;
@@ -16,8 +17,8 @@ public class RaceRegistrationController
     public int getNumberOfRacersRegisteredForRace(UUID raceId)
     {
         var res = 0;
-        var registrations = raceRegistrationRepository.getRegistrationsByRace(raceId);
-        while (registrations.iterator().hasNext())
+        var raceRegistrations = raceRegistrationRepository.getRegistrationsByRace(raceId);
+        for (RaceRegistration raceRegistration : raceRegistrations)
         {
             res++;
         }

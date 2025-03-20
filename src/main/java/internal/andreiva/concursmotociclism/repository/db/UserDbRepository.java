@@ -77,6 +77,11 @@ public class UserDbRepository extends AbstractDbRepository<UUID, User> implement
     @Override
     public User getUserByUsername(String username)
     {
-        return getEntitiesByField("username", username).iterator().next();
+        var iterator = getEntitiesByField("username", username).iterator();
+        if (iterator.hasNext())
+        {
+            return iterator.next();
+        }
+        return null;
     }
 }
