@@ -33,7 +33,7 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
     {
         var racer = racerRepository.get(UUID.fromString(rs.getString("racer")));
         var race = raceRepository.get(UUID.fromString(rs.getString("race")));
-        return new RaceRegistration(UUID.fromString(rs.getString("uuid")), race, racer, rs.getInt("class"));
+        return new RaceRegistration(UUID.fromString(rs.getString("uuid")), race, racer);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
     {
         logger.traceEntry();
         logger.info("Adding new RaceRegistration to database");
-        String sql = "INSERT INTO raceregistration(uuid, race, racer, class) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO raceregistration(uuid, race, racer) VALUES (?, ?, ?)";
         try
         {
             var connection = jdbcUtils.getConnection();
@@ -49,7 +49,6 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
             preparedStatement.setString(1, entity.getId().toString());
             preparedStatement.setString(2, entity.getRace().getId().toString());
             preparedStatement.setString(3, entity.getRacer().getId().toString());
-            preparedStatement.setInt(4, entity.getRaceClass());
             preparedStatement.executeUpdate();
         } catch (Exception e)
         {
@@ -62,15 +61,14 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
     {
         logger.traceEntry();
         logger.info("Updating RaceRegistration with id:" + entity.getId());
-        String sql = "UPDATE raceregistration SET race = ?, racer = ?, class = ? WHERE uuid = ?";
+        String sql = "UPDATE raceregistration SET race = ?, racer = ? WHERE uuid = ?";
         try
         {
             var connection = jdbcUtils.getConnection();
             var preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, entity.getRace().getId().toString());
             preparedStatement.setString(2, entity.getRacer().getId().toString());
-            preparedStatement.setInt(3, entity.getRaceClass());
-            preparedStatement.setString(4, entity.getId().toString());
+            preparedStatement.setString(3, entity.getId().toString());
             preparedStatement.executeUpdate();
         } catch (Exception e)
         {
