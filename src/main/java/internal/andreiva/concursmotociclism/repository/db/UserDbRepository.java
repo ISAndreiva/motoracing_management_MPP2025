@@ -32,6 +32,13 @@ public class UserDbRepository extends AbstractDbRepository<UUID, User> implement
     {
         logger.traceEntry();
         logger.info("Adding user to database");
+
+        if (getUserByUsername(entity.getUsername()) != null)
+        {
+            logger.error("User already exists");
+            return;
+        }
+
         String sql = "INSERT INTO user (uuid, username, password_hash) VALUES (?, ?, ?)";
         try
         {
@@ -65,5 +72,11 @@ public class UserDbRepository extends AbstractDbRepository<UUID, User> implement
         {
             logger.error(e);
         }
+    }
+
+    @Override
+    public User getUserByUsername(String username)
+    {
+        return getEntitiesByField("username", username).iterator().next();
     }
 }

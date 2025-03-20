@@ -19,46 +19,11 @@ public class Main
             throw new RuntimeException(e);
         }
 
-//        var user1 = new User(UUID.randomUUID(), "Andreiva", "password_hash");
-//        var user2 = new User(UUID.randomUUID(), "Andrei", "password_hash");
-//        var Team1 = new Team(UUID.randomUUID(), "Team1");
-//        var Team2 = new Team(UUID.randomUUID(), "Team2");
-//        var Race1 = new Race(UUID.randomUUID(), 250, "Race1");
-//        var Race2 = new Race(UUID.randomUUID(), 1000, "Race2");
-//        var Racer1 = new Racer(UUID.randomUUID(), "Racer1", Team1, "0123456789111");
-//        var Racer2 = new Racer(UUID.randomUUID(), "Racer2", Team2, "0123456789222");
-//        var raceRegistration1 = new RaceRegistration(UUID.randomUUID(), Race1, Racer1, Race1.getRaceClass());
-//        var raceRegistration2 = new RaceRegistration(UUID.randomUUID(), Race2, Racer2, Race2.getRaceClass());
-
         var userDbRepository = new UserDbRepository(properties);
         var teamDbRepository = new TeamDbRepository(properties);
         var raceDbRepository = new RaceDbRepository(properties);
         var racerDbRepository = new RacerDbRepository(properties, teamDbRepository);
         var raceRegistrationDbRepository = new RaceRegistrationDbRepository(properties, racerDbRepository, raceDbRepository);
-
-//        userDbRepository.add(user1);
-//        userDbRepository.add(user2);
-//        teamDbRepository.add(Team1);
-//        teamDbRepository.add(Team2);
-//        raceDbRepository.add(Race1);
-//        raceDbRepository.add(Race2);
-//        racerDbRepository.add(Racer1);
-//        racerDbRepository.add(Racer2);
-//        raceRegistrationDbRepository.add(raceRegistration1);
-//        raceRegistrationDbRepository.add(raceRegistration2);
-
-        //var users = userDbRepository.getAll();
-        //var teams = teamDbRepository.getAll();
-
-        System.out.println("Teams:");
-        for (var e : raceDbRepository.getRacesByClass(250))
-        {
-            System.out.println(e.getRaceName());
-        }
-
-
-
-
 
     }
 }

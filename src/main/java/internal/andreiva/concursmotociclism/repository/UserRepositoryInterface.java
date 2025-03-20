@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface UserRepositoryInterface extends RepositoryInterface<UUID, User>
 {
+    User getUserByUsername(String username);
 }

@@ -93,4 +93,28 @@ public class RaceDbRepository extends AbstractDbRepository<UUID, Race> implement
             return null;
         }
     }
+
+    @Override
+    public Iterable<Integer> getRaceClasses()
+    {
+        logger.traceEntry();
+        logger.info("Getting all race classes");
+        String sql = "SELECT DISTINCT class from race";
+        var array = new ArrayList<Integer>();
+        try
+        {
+            var connection = jdbcUtils.getConnection();
+            var preparedStatement = connection.prepareStatement(sql);
+            var resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                array.add(resultSet.getInt("class"));
+            }
+            return array;
+        } catch (Exception e)
+        {
+            logger.error(e);
+            return null;
+        }
+    }
 }
