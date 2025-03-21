@@ -1,10 +1,13 @@
 package internal.andreiva.concursmotociclism.service;
 
 import internal.andreiva.concursmotociclism.domain.Race;
+import internal.andreiva.concursmotociclism.domain.Racer;
+import internal.andreiva.concursmotociclism.domain.Team;
 import internal.andreiva.concursmotociclism.repository.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Set;
 import java.util.UUID;
 
 public class Service
@@ -53,6 +56,24 @@ public class Service
     {
         logger.info("Checking if user exists: {}", username);
         return userController.checkUserExists(username);
+    }
+
+    public Iterable<Racer> getRacersByTeam(UUID teamId)
+    {
+        logger.info("Getting racers by team id {}", teamId);
+        return racerController.getRacersByTeam(teamId);
+    }
+
+    public Set<Integer> getRacerClasses(UUID racerId)
+    {
+        logger.info("Getting racer classes for id {}", racerId);
+        return raceRegistrationController.getRacerClasses(racerId);
+    }
+
+    public Iterable<Team> getTeamsByPartialName(String name)
+    {
+        logger.info("Getting teams by partial name {}", name);
+        return teamController.getTeamsByPartialName(name);
     }
 
 }

@@ -1,8 +1,11 @@
 package internal.andreiva.concursmotociclism.gui;
 
 import internal.andreiva.concursmotociclism.domain.Race;
+import internal.andreiva.concursmotociclism.domain.Racer;
 import internal.andreiva.concursmotociclism.service.Service;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -11,7 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -20,13 +25,50 @@ public class GuiAdminController extends AbstractGuiController<Object>
     @FXML
     private Pagination racesPagination;
 
+    @FXML
+    private TableView<Racer> racerTable;
+
+    @FXML
+    private TableColumn<Racer, String> racerTableName;
+
+    @FXML
+    private TableColumn<Racer, String> racerTableClass;
+
+    @FXML
+    private TextField teamSearchField;
+
     private List<Integer> raceClasses;
+
 
     @Override
     public void setService(Service service)
     {
         super.setService(service);
         createPages();
+        setUpRacerTable();
+        setUpSearchField();
+    }
+
+    private void setUpSearchField()
+    {
+        PauseTransition pause = new PauseTransition(Duration.millis(350));
+        teamSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            pause.setOnFinished(event -> teamSearchFieldUpdated());
+            pause.playFromStart();
+        });
+    }
+
+    private void setUpRacerTable()
+    {
+        class racerClassesFactory implements Callback<TableColumn.CellDataFeatures<Racer, String>, ObservableValue<String>> {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Racer, String> param) {
+                var classes = service.getRacerClasses(param.getValue().getId());
+                return new SimpleStringProperty(classes.toString());
+            }
+        }
+        racerTableName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        racerTableClass.setCellValueFactory(new racerClassesFactory());
     }
 
     private void createPages()
@@ -36,17 +78,17 @@ public class GuiAdminController extends AbstractGuiController<Object>
         racesPagination.setPageFactory(this::createPage);
     }
 
-    private class racersNoFactory implements Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>> {
-        @Override
-        public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> param) {
-            return new SimpleIntegerProperty(service.getRacersCountForRace(param.getValue().getId())).asObject();
-        }
-    }
-
     private Node createPage(int pageIndex)
     {
+        class racersNoFactory implements Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>> {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> param) {
+                return new SimpleIntegerProperty(service.getRacersCountForRace(param.getValue().getId())).asObject();
+            }
+        }
+
         var box = new VBox();
-        var label = new Label("Race class: " + raceClasses.get(pageIndex));
+        var label = new Label("Race class: " + raceClasses.get(pageIndex) + "mc");
         label.setStyle("-fx-alignment: center; -fx-font-size: 20px; -fx-font-weight: bold");
         box.setAlignment(javafx.geometry.Pos.CENTER);
 
@@ -66,5 +108,32 @@ public class GuiAdminController extends AbstractGuiController<Object>
         box.getChildren().addAll(label, table);
 
         return box;
+    }
+
+    @FXML
+    private void teamSearchFieldUpdated()
+    {
+        if (teamSearchField.getText().isEmpty())
+        {
+            racerTable.setVisible(false);
+            racesPagination.setVisible(true);
+        }
+        else
+        {
+            racerTable.setVisible(true);
+            racesPagination.setVisible(false);
+            var teams = service.getTeamsByPartialName(teamSearchField.getText());
+            if (teams == null || !teams.iterator().hasNext())
+            {
+                racerTable.setItems(FXCollections.observableArrayList());
+                return;
+            }
+            var racers = new ArrayList<Racer>();
+            for (var team : teams)
+            {
+                racers.addAll(StreamSupport.stream(service.getRacersByTeam(team.getId()).spliterator(), false).toList());
+            }
+            racerTable.setItems(FXCollections.observableArrayList(racers));
+        }
     }
 }

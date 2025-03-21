@@ -5,6 +5,7 @@ import internal.andreiva.concursmotociclism.repository.TeamRepositoryInterface;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -62,6 +63,29 @@ public class TeamDbRepository extends AbstractDbRepository<UUID, Team> implement
         } catch (Exception e)
         {
             logger.error(e);
+        }
+    }
+
+    @Override
+    public Iterable<Team> getTeamsByPartialName(String partialName)
+    {
+        var result = new ArrayList<Team>();
+        var sql = "SELECT * FROM team WHERE name LIKE ?";
+        try
+        {
+            var connection = jdbcUtils.getConnection();
+            var preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + partialName + "%");
+            var resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                result.add(resultToEntity(resultSet));
+            }
+            return result;
+        } catch (Exception e)
+        {
+            logger.error(e);
+            return null;
         }
     }
 }

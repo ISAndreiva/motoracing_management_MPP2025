@@ -3,9 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="internal.andreiva.concursmotociclism.gui.GuiAdminController">
+<AnchorPane prefHeight="437.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="internal.andreiva.concursmotociclism.gui.GuiAdminController">
    <children>
-      <Pagination fx:id="racesPagination" layoutX="14.0" layoutY="14.0" prefHeight="338.0" prefWidth="575.0" />
+      <Pagination fx:id="racesPagination" layoutX="13.0" layoutY="50.0" prefHeight="338.0" prefWidth="575.0" />
+      <TableView fx:id="racerTable" layoutX="12.0" layoutY="50.0" prefHeight="338.0" prefWidth="575.0" visible="false">
+        <columns>
+          <TableColumn fx:id="racerTableName" prefWidth="288.0" text="Nume" />
+          <TableColumn fx:id="racerTableClass" minWidth="0.0" prefWidth="285.0" text="Clasa/e" />
+        </columns>
+      </TableView>
+      <TextField fx:id="teamSearchField" layoutX="220.0" layoutY="14.0" onAction="#teamSearchFieldUpdated" promptText="Search for team..." />
    </children>
 </AnchorPane>
