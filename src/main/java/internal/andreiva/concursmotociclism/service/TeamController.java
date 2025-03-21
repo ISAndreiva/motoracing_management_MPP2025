@@ -16,4 +16,14 @@ public class TeamController
     {
         return teamRepository.getTeamsByPartialName(partialName);
     }
+
+    public Team getTeamByName(String name)
+    {
+        return teamRepository.getTeamByName(name);
+    }
+
+    public Iterable<Team> getAllTeams()
+    {
+        return teamRepository.getAll();
+    }
 }

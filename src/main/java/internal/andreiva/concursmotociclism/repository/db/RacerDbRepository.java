@@ -37,6 +37,13 @@ public class RacerDbRepository extends AbstractDbRepository<UUID, Racer> impleme
     {
         logger.traceEntry();
         logger.info("Adding Racer to database");
+
+        if (getRacerByCNP(entity.getCNP()) != null)
+        {
+            logger.error("User already exists");
+            return;
+        }
+
         String sql = "INSERT INTO racer(uuid, name, cnp, team) VALUES (?, ?, ?, ?)";
         try
         {
@@ -79,5 +86,16 @@ public class RacerDbRepository extends AbstractDbRepository<UUID, Racer> impleme
     public Iterable<Racer> getRacersByTeam(UUID teamId)
     {
         return super.getEntitiesByField("team", teamId);
+    }
+
+    @Override
+    public Racer getRacerByCNP(String cnp)
+    {
+        var iterator = getEntitiesByField("cnp", cnp).iterator();
+        if (iterator.hasNext())
+        {
+            return iterator.next();
+        }
+        return null;
     }
 }

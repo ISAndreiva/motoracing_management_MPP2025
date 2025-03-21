@@ -88,4 +88,15 @@ public class TeamDbRepository extends AbstractDbRepository<UUID, Team> implement
             return null;
         }
     }
+
+    @Override
+    public Team getTeamByName(String name)
+    {
+        var iterator = getEntitiesByField("name", name).iterator();
+        if (iterator.hasNext())
+        {
+            return iterator.next();
+        }
+        return null;
+    }
 }

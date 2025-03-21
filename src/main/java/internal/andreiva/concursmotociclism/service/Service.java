@@ -1,6 +1,7 @@
 package internal.andreiva.concursmotociclism.service;
 
 import internal.andreiva.concursmotociclism.domain.Race;
+import internal.andreiva.concursmotociclism.domain.RaceRegistration;
 import internal.andreiva.concursmotociclism.domain.Racer;
 import internal.andreiva.concursmotociclism.domain.Team;
 import internal.andreiva.concursmotociclism.repository.*;
@@ -40,10 +41,10 @@ public class Service
         return raceController.getRacesByClass(raceClass);
     }
 
-    public Iterable<Integer> getRaceClasses()
+    public Iterable<Integer> getUsedRaceClasses()
     {
-        logger.info("Getting all race classes");
-        return raceController.getRaceClasses();
+        logger.info("Getting all used race classes");
+        return raceController.getUserRaceClasses();
     }
 
     public int getRacersCountForRace(UUID raceId)
@@ -74,6 +75,36 @@ public class Service
     {
         logger.info("Getting teams by partial name {}", name);
         return teamController.getTeamsByPartialName(name);
+    }
+
+    public Iterable<Team> getAllTeams()
+    {
+        logger.info("Getting all teams");
+        return teamController.getAllTeams();
+    }
+
+    public void addRacer(Racer racer)
+    {
+        logger.info("Adding racer {} with CNP {}",racer.getName(), racer.getCNP());
+        racerController.addRacer(racer);
+    }
+
+    public Iterable<Race> getAllRaces()
+    {
+        return raceController.getAllRaces();
+    }
+
+    public void addRaceRegistration(String racerName, String racerCNP, String teamName, String raceName)
+    {
+        logger.info("Adding race registration for {} in race {}", racerName, raceName);
+        var racer = racerController.getRacerByCNP(racerCNP);
+        if (racer == null)
+        {
+            racer = new Racer(UUID.randomUUID(), racerName, teamController.getTeamByName(teamName), racerCNP);
+            addRacer(racer);
+        }
+        var race = raceController.getRaceByName(raceName);
+        raceRegistrationController.addRaceRegistration(new RaceRegistration(UUID.randomUUID(), race, racer));
     }
 
 }

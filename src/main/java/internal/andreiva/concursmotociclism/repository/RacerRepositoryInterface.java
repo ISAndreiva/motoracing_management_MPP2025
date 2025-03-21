@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface RacerRepositoryInterface extends RepositoryInterface<UUID, Racer>
 {
     Iterable<Racer> getRacersByTeam(UUID teamId);
+
+    Racer getRacerByCNP(String cnp);
 }

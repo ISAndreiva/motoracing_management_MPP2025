@@ -8,5 +8,7 @@ public interface RaceRepositoryInterface extends RepositoryInterface<UUID, Race>
 {
     Iterable<Race> getRacesByClass(int raceClass);
 
-    Iterable<Integer> getRaceClasses();
+    Iterable<Integer> getUsedRaceClasses();
+
+    Race getRaceByName(String name);
 }

@@ -38,5 +38,9 @@ public class RaceRegistrationController
         return res;
     }
 
+    public void addRaceRegistration(RaceRegistration raceRegistration)
+    {
+        raceRegistrationRepository.add(raceRegistration);
+    }
 
 }

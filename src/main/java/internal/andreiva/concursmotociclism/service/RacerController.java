@@ -18,4 +18,14 @@ public class RacerController
     {
         return racerRepository.getRacersByTeam(teamId);
     }
+
+    public void addRacer(Racer racer)
+    {
+        racerRepository.add(racer);
+    }
+
+    public Racer getRacerByCNP(String cnp)
+    {
+        return racerRepository.getRacerByCNP(cnp);
+    }
 }

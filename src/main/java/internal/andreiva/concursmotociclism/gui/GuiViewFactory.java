@@ -51,6 +51,15 @@ public class GuiViewFactory extends Application
         stage.show();
     }
 
+    public static Stage registerView()
+    {
+        Stage stage = new Stage();
+        stage.setScene(createScene("concursmotociclism/gui/registerView.fxml", null, null));
+        stage.setTitle("Concurs Motociclism");
+        stage.show();
+        return stage;
+    }
+
     private static Scene createScene(String fxml, String css, Object parameter)
     {
         FXMLLoader fxmlLoader = new FXMLLoader(GuiViewFactory.class.getClassLoader().getResource(fxml));

@@ -95,10 +95,10 @@ public class RaceDbRepository extends AbstractDbRepository<UUID, Race> implement
     }
 
     @Override
-    public Iterable<Integer> getRaceClasses()
+    public Iterable<Integer> getUsedRaceClasses()
     {
         logger.traceEntry();
-        logger.info("Getting all race classes");
+        logger.info("Getting all used race classes");
         String sql = "SELECT DISTINCT class from race";
         var array = new ArrayList<Integer>();
         try
@@ -116,5 +116,16 @@ public class RaceDbRepository extends AbstractDbRepository<UUID, Race> implement
             logger.error(e);
             return null;
         }
+    }
+
+    @Override
+    public Race getRaceByName(String name)
+    {
+        var iterator = getEntitiesByField("name", name).iterator();
+        if (iterator.hasNext())
+        {
+            return iterator.next();
+        }
+        return null;
     }
 }

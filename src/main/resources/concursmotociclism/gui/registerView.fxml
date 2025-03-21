@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="288.0" prefWidth="305.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="internal.andreiva.concursmotociclism.gui.GuiRegisterController">
+   <children>
+      <Label layoutX="81.0" layoutY="14.0" text="Inscriere participant">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <VBox alignment="TOP_CENTER" layoutX="53.0" layoutY="44.0" prefHeight="147.0" prefWidth="199.0" spacing="5.0">
+         <children>
+            <TextField fx:id="nameTextField" promptText="Nume:" />
+            <TextField fx:id="cnpTextField" promptText="CNP:" />
+            <ChoiceBox fx:id="teamComboBox" prefHeight="26.0" prefWidth="209.0" />
+            <ChoiceBox fx:id="raceComboBox" prefHeight="26.0" prefWidth="221.0" />
+         </children>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </VBox>
+      <Button layoutX="121.0" layoutY="191.0" mnemonicParsing="false" onAction="#handleRegisterButton" text="Inscrie!" />
+   </children>
+</AnchorPane>

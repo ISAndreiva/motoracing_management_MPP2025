@@ -12,13 +12,23 @@ public class RaceController
         this.raceRepository = raceRepository;
     }
 
-    public Iterable<Integer> getRaceClasses()
+    public Iterable<Integer> getUserRaceClasses()
     {
-        return raceRepository.getRaceClasses();
+        return raceRepository.getUsedRaceClasses();
     }
 
     public Iterable<Race> getRacesByClass(int raceClass)
     {
         return raceRepository.getRacesByClass(raceClass);
+    }
+
+    public Iterable<Race> getAllRaces()
+    {
+        return raceRepository.getAll();
+    }
+
+    public Race getRaceByName(String name)
+    {
+        return raceRepository.getRaceByName(name);
     }
 }

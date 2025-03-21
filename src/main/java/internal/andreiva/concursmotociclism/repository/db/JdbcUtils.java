@@ -14,7 +14,7 @@ public class JdbcUtils {
 
     private static final Logger logger= LogManager.getLogger();
 
-    private Connection connection_instance = null;
+    private static Connection connection_instance = null;
 
     public JdbcUtils(Properties props){
         jdbcProps=props;

@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
@@ -39,6 +40,8 @@ public class GuiAdminController extends AbstractGuiController<Object>
 
     private List<Integer> raceClasses;
 
+    private Stage childStage = null;
+
 
     @Override
     public void setService(Service service)
@@ -64,6 +67,7 @@ public class GuiAdminController extends AbstractGuiController<Object>
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Racer, String> param) {
                 var classes = service.getRacerClasses(param.getValue().getId());
+                System.out.println("Changed classes");
                 return new SimpleStringProperty(classes.toString());
             }
         }
@@ -73,9 +77,11 @@ public class GuiAdminController extends AbstractGuiController<Object>
 
     private void createPages()
     {
-        raceClasses =  StreamSupport.stream(service.getRaceClasses().spliterator(), false).toList();
+        var index = racesPagination.getCurrentPageIndex();
+        raceClasses =  StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toList();
         racesPagination.setPageCount(raceClasses.size());
         racesPagination.setPageFactory(this::createPage);
+        racesPagination.setCurrentPageIndex(index);
     }
 
     private Node createPage(int pageIndex)
@@ -88,7 +94,7 @@ public class GuiAdminController extends AbstractGuiController<Object>
         }
 
         var box = new VBox();
-        var label = new Label("Race class: " + raceClasses.get(pageIndex) + "mc");
+        var label = new Label("Clasa: " + raceClasses.get(pageIndex) + "mc");
         label.setStyle("-fx-alignment: center; -fx-font-size: 20px; -fx-font-weight: bold");
         box.setAlignment(javafx.geometry.Pos.CENTER);
 
@@ -110,8 +116,8 @@ public class GuiAdminController extends AbstractGuiController<Object>
         return box;
     }
 
-    @FXML
-    private void teamSearchFieldUpdated()
+
+    public void teamSearchFieldUpdated()
     {
         if (teamSearchField.getText().isEmpty())
         {
@@ -122,6 +128,7 @@ public class GuiAdminController extends AbstractGuiController<Object>
         {
             racerTable.setVisible(true);
             racesPagination.setVisible(false);
+            racerTable.getItems().clear();
             var teams = service.getTeamsByPartialName(teamSearchField.getText());
             if (teams == null || !teams.iterator().hasNext())
             {
@@ -135,5 +142,17 @@ public class GuiAdminController extends AbstractGuiController<Object>
             }
             racerTable.setItems(FXCollections.observableArrayList(racers));
         }
+    }
+
+    public void handleAddRacer()
+    {
+        childStage = GuiViewFactory.registerView();
+    }
+
+    public void handleLogout()
+    {
+        childStage.close();
+        var currentStage = (Stage) racesPagination.getScene().getWindow();
+        currentStage.close();
     }
 }

@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface TeamRepositoryInterface extends RepositoryInterface<UUID, Team>
 {
     Iterable<Team> getTeamsByPartialName(String partialName);
+
+    Team getTeamByName(String name);
 }
