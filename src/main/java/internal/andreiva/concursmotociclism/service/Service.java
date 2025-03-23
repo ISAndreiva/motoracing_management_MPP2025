@@ -5,13 +5,16 @@ import internal.andreiva.concursmotociclism.domain.RaceRegistration;
 import internal.andreiva.concursmotociclism.domain.Racer;
 import internal.andreiva.concursmotociclism.domain.Team;
 import internal.andreiva.concursmotociclism.repository.*;
+import internal.andreiva.concursmotociclism.utils.Event;
+import internal.andreiva.concursmotociclism.utils.EventType;
+import internal.andreiva.concursmotociclism.utils.Observable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Set;
 import java.util.UUID;
 
-public class Service
+public class Service extends Observable
 {
     private final UserController userController;
     private final TeamController teamController;
@@ -85,7 +88,7 @@ public class Service
 
     public void addRacer(Racer racer)
     {
-        logger.info("Adding racer {} with CNP {}",racer.getName(), racer.getCNP());
+        logger.info("Adding racer {} with CNP {}", racer.getName(), racer.getCNP());
         racerController.addRacer(racer);
     }
 
@@ -105,6 +108,7 @@ public class Service
         }
         var race = raceController.getRaceByName(raceName);
         raceRegistrationController.addRaceRegistration(new RaceRegistration(UUID.randomUUID(), race, racer));
+        notifyObservers(new Event(EventType.RaceRegistration));
     }
 
 }

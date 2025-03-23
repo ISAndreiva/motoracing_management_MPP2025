@@ -3,6 +3,9 @@ package internal.andreiva.concursmotociclism.gui;
 import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.domain.Racer;
 import internal.andreiva.concursmotociclism.service.Service;
+import internal.andreiva.concursmotociclism.utils.Event;
+import internal.andreiva.concursmotociclism.utils.EventType;
+import internal.andreiva.concursmotociclism.utils.Observer;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class GuiAdminController extends AbstractGuiController<Object>
+public class GuiAdminController extends AbstractGuiController<Object> implements Observer
 {
     @FXML
     private Pagination racesPagination;
@@ -40,16 +43,28 @@ public class GuiAdminController extends AbstractGuiController<Object>
 
     private List<Integer> raceClasses;
 
-    private Stage childStage = null;
+    private List<Stage> childStages = new ArrayList<>();
 
 
     @Override
     public void setService(Service service)
     {
         super.setService(service);
+        service.addObserver(this);
         createPages();
         setUpRacerTable();
         setUpSearchField();
+    }
+
+    @Override
+    public void update(Event event)
+    {
+        if (event.type() == EventType.RaceRegistration)
+        {
+            createPages();
+            racerTable.getItems().clear();
+            teamSearchFieldUpdated();
+        }
     }
 
     private void setUpSearchField()
@@ -67,7 +82,6 @@ public class GuiAdminController extends AbstractGuiController<Object>
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Racer, String> param) {
                 var classes = service.getRacerClasses(param.getValue().getId());
-                System.out.println("Changed classes");
                 return new SimpleStringProperty(classes.toString());
             }
         }
@@ -78,7 +92,7 @@ public class GuiAdminController extends AbstractGuiController<Object>
     private void createPages()
     {
         var index = racesPagination.getCurrentPageIndex();
-        raceClasses =  StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toList();
+        raceClasses = StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toList();
         racesPagination.setPageCount(raceClasses.size());
         racesPagination.setPageFactory(this::createPage);
         racesPagination.setCurrentPageIndex(index);
@@ -128,7 +142,6 @@ public class GuiAdminController extends AbstractGuiController<Object>
         {
             racerTable.setVisible(true);
             racesPagination.setVisible(false);
-            racerTable.getItems().clear();
             var teams = service.getTeamsByPartialName(teamSearchField.getText());
             if (teams == null || !teams.iterator().hasNext())
             {
@@ -146,12 +159,13 @@ public class GuiAdminController extends AbstractGuiController<Object>
 
     public void handleAddRacer()
     {
-        childStage = GuiViewFactory.registerView();
+        childStages.add(GuiViewFactory.registerView());
     }
 
     public void handleLogout()
     {
-        childStage.close();
+        service.removeObserver(this);
+        childStages.forEach(Stage::close);
         var currentStage = (Stage) racesPagination.getScene().getWindow();
         currentStage.close();
     }
