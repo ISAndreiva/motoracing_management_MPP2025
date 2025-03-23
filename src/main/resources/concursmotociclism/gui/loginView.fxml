@@ -7,12 +7,12 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="internal.andreiva.concursmotociclism.gui.GuiLoginController">
     <Pane prefHeight="400.0" prefWidth="600.0">
         <HBox alignment="CENTER" layoutX="161.0" layoutY="156.0" prefHeight="35.0" prefWidth="280.0" spacing="20.0">
-            <Label text="Username:">
+            <Label alignment="CENTER" prefHeight="26.0" prefWidth="120.0" text="Username">
                 <font>
                     <Font name="System Bold" size="16.0" />
                 </font>
             </Label>
-            <TextField fx:id="usernameTextField" onAction="#handleLogin" />
+            <TextField fx:id="usernameTextField" onAction="#handleLogin" prefHeight="26.0" prefWidth="170.0" />
         </HBox>
         <Label alignment="CENTER" layoutX="-2.0" layoutY="71.0" prefHeight="26.0" prefWidth="606.0" text="Concurs Motociclism Mnagament">
             <font>
@@ -27,12 +27,12 @@
         </Label>
         <HBox alignment="CENTER" layoutX="160.0" layoutY="200.0" prefHeight="35.0" prefWidth="280.0" spacing="20.0">
             <children>
-                <Label prefHeight="22.0" prefWidth="90.0" text="Password">
+                <Label alignment="CENTER" prefHeight="26.0" prefWidth="120.0" text="Password">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
-                <PasswordField fx:id="passwordTextField" onAction="#handleLogin" />
+                <PasswordField fx:id="passwordTextField" onAction="#handleLogin" prefHeight="26.0" prefWidth="170.0" />
             </children>
         </HBox>
     </Pane>
