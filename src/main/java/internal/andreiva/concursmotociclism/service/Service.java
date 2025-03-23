@@ -47,7 +47,7 @@ public class Service extends Observable
     public Iterable<Integer> getUsedRaceClasses()
     {
         logger.info("Getting all used race classes");
-        return raceController.getUserRaceClasses();
+        return raceController.getUsedRaceClasses();
     }
 
     public int getRacersCountForRace(UUID raceId)

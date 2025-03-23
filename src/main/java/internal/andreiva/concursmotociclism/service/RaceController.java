@@ -12,7 +12,7 @@ public class RaceController
         this.raceRepository = raceRepository;
     }
 
-    public Iterable<Integer> getUserRaceClasses()
+    public Iterable<Integer> getUsedRaceClasses()
     {
         return raceRepository.getUsedRaceClasses();
     }
