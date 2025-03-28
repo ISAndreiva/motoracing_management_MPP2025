@@ -94,12 +94,13 @@ public class Service extends Observable
 
     public Iterable<Race> getAllRaces()
     {
+        logger.info("Getting all races");
         return raceController.getAllRaces();
     }
 
     public void addRaceRegistration(String racerName, String racerCNP, String teamName, String raceName)
     {
-        logger.info("Adding race registration for {} in race {}", racerName, raceName);
+            logger.info("Adding race registration for {} in race {}", racerName, raceName);
         var racer = racerController.getRacerByCNP(racerCNP);
         if (racer == null)
         {

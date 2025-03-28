@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -27,7 +26,7 @@ import java.util.stream.StreamSupport;
 public class GuiAdminController extends AbstractGuiController<Object> implements Observer
 {
     @FXML
-    private Pagination racesPagination;
+    private TabPane racesTabPane;
 
     @FXML
     private TableView<Racer> racerTable;
@@ -43,7 +42,7 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
 
     private List<Integer> raceClasses;
 
-    private List<Stage> childStages = new ArrayList<>();
+    private final List<Stage> childStages = new ArrayList<>();
 
 
     @Override
@@ -51,7 +50,7 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
     {
         super.setService(service);
         service.addObserver(this);
-        createPages();
+        createTabs();
         setUpRacerTable();
         setUpSearchField();
     }
@@ -61,7 +60,7 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
     {
         if (event.type() == EventType.RaceRegistration)
         {
-            createPages();
+            createTabs();
             racerTable.getItems().clear();
             teamSearchFieldUpdated();
         }
@@ -89,13 +88,22 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
         racerTableClass.setCellValueFactory(new racerClassesFactory());
     }
 
-    private void createPages()
+    private void createTabs()
     {
-        var index = racesPagination.getCurrentPageIndex();
+        var pos = racesTabPane.getSelectionModel().getSelectedIndex();
         raceClasses = StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toList();
-        racesPagination.setPageCount(raceClasses.size());
-        racesPagination.setPageFactory(this::createPage);
-        racesPagination.setCurrentPageIndex(index);
+        racesTabPane.getTabs().clear();
+        var tab = new Tab("Toate");
+        tab.setContent(createPage(-1));
+        racesTabPane.getTabs().add(tab);
+
+        for (var i = 0; i < raceClasses.size(); i++)
+        {
+            tab = new Tab("Clasa: " + raceClasses.get(i) + "mc");
+            tab.setContent(createPage(i));
+            racesTabPane.getTabs().add(tab);
+        }
+        racesTabPane.getSelectionModel().select(pos);
     }
 
     private Node createPage(int pageIndex)
@@ -107,27 +115,40 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
             }
         }
 
-        var box = new VBox();
-        var label = new Label("Clasa: " + raceClasses.get(pageIndex) + "mc");
-        label.setStyle("-fx-alignment: center; -fx-font-size: 20px; -fx-font-weight: bold");
-        box.setAlignment(javafx.geometry.Pos.CENTER);
-
         TableView<Race> table = new TableView<>();
-        TableColumn<Race, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setPrefWidth(285);
-        TableColumn<Race, Integer> racersNoColumn = new TableColumn<>("Participants");
-        racersNoColumn.setPrefWidth(285);
+        if (pageIndex != -1)
+        {
+            TableColumn<Race, String> nameColumn = new TableColumn<>("Nume");
+            nameColumn.setPrefWidth(285);
+            TableColumn<Race, Integer> racersNoColumn = new TableColumn<>("Nr Participanti");
+            racersNoColumn.setPrefWidth(285);
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("raceName"));
-        racersNoColumn.setCellValueFactory(new racersNoFactory());
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("raceName"));
+            racersNoColumn.setCellValueFactory(new racersNoFactory());
 
-        var races = StreamSupport.stream(service.getRacesByClass(raceClasses.get(pageIndex)).spliterator(), false).toList();
-        table.getColumns().setAll(List.of(nameColumn, racersNoColumn));
-        table.setItems(FXCollections.observableArrayList(races));
+            var races = StreamSupport.stream(service.getRacesByClass(raceClasses.get(pageIndex)).spliterator(), false).toList();
+            table.getColumns().setAll(List.of(nameColumn, racersNoColumn));
+            table.setItems(FXCollections.observableArrayList(races));
+        }
+        else
+        {
+            TableColumn<Race, String> nameColumn = new TableColumn<>("Nume");
+            nameColumn.setPrefWidth(190);
+            TableColumn<Race, String> classColumn = new TableColumn<>("Clasa");
+            classColumn.setPrefWidth(190);
+            TableColumn<Race, Integer> racersNoColumn = new TableColumn<>("Nr Participanti");
+            racersNoColumn.setPrefWidth(190);
 
-        box.getChildren().addAll(label, table);
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("raceName"));
+            classColumn.setCellValueFactory(new PropertyValueFactory<>("raceClass"));
+            racersNoColumn.setCellValueFactory(new racersNoFactory());
 
-        return box;
+            var races = StreamSupport.stream(service.getAllRaces().spliterator(), false).toList();
+            table.getColumns().setAll(List.of(nameColumn, classColumn, racersNoColumn));
+            table.setItems(FXCollections.observableArrayList(races));
+        }
+
+        return table;
     }
 
 
@@ -136,12 +157,12 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
         if (teamSearchField.getText().isEmpty())
         {
             racerTable.setVisible(false);
-            racesPagination.setVisible(true);
+            racesTabPane.setVisible(true);
         }
         else
         {
             racerTable.setVisible(true);
-            racesPagination.setVisible(false);
+            racesTabPane.setVisible(false);
             var teams = service.getTeamsByPartialName(teamSearchField.getText());
             if (teams == null || !teams.iterator().hasNext())
             {
@@ -166,7 +187,7 @@ public class GuiAdminController extends AbstractGuiController<Object> implements
     {
         service.removeObserver(this);
         childStages.forEach(Stage::close);
-        var currentStage = (Stage) racesPagination.getScene().getWindow();
+        var currentStage = (Stage) racesTabPane.getScene().getWindow();
         currentStage.close();
     }
 }
