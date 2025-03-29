@@ -66,8 +66,7 @@ public class GuiViewFactory extends Application
         try
         {
             AnchorPane root = fxmlLoader.load();
-            AbstractGuiController<Object> controller = fxmlLoader.getController();
-            controller.setSomething(parameter);
+            AbstractGuiController controller = fxmlLoader.getController();
             controller.setService(service);
             double scaleValue = 1.25;
             Scale scale = new Scale(scaleValue, scaleValue);

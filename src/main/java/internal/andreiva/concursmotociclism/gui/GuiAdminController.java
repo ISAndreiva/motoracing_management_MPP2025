@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class GuiAdminController extends AbstractGuiController<Object> implements Observer
+public class GuiAdminController extends AbstractGuiController implements Observer
 {
     @FXML
     private TabPane racesTabPane;

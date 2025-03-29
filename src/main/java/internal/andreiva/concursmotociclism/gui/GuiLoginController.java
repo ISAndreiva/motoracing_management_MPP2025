@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class GuiLoginController extends AbstractGuiController<Object>
+public class GuiLoginController extends AbstractGuiController
 {
     @FXML
     TextField usernameTextField;
