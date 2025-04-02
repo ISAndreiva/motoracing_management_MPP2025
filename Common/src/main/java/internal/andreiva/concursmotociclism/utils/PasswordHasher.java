@@ -1,19 +1,13 @@
 package internal.andreiva.concursmotociclism.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class PasswordHasher
 {
-    protected final static Logger logger = LogManager.getLogger();
 
     public static String hashPassword(String password, String username)
     {
-        logger.traceEntry(username);
-        logger.info("Hashing password for user: {}", username);
         byte[] salt = new byte[16];
         System.arraycopy(username.getBytes(), 0, salt, 0, Math.min(username.getBytes().length, 16));
 
@@ -33,7 +27,7 @@ public class PasswordHasher
         }
         catch (NoSuchAlgorithmException e)
         {
-            logger.error(e);
+
         }
         return hashedPassword;
     }

@@ -1,6 +1,5 @@
 package internal.andreiva.concursmotociclism;
 
-import internal.andreiva.concursmotociclism.gui.GuiViewFactory;
 import internal.andreiva.concursmotociclism.repository.db.*;
 import internal.andreiva.concursmotociclism.service.Service;
 
@@ -28,8 +27,12 @@ public class Main
         var raceRegistrationDbRepository = new RaceRegistrationDbRepository(properties, racerDbRepository, raceDbRepository);
 
         var service = new Service(userDbRepository, teamDbRepository, raceDbRepository, racerDbRepository, raceRegistrationDbRepository);
-        GuiViewFactory.setService(service);
-        GuiViewFactory.launch();
+
+        System.out.println("Ready to serve some clients!");
+        while(true)
+        {
+            //serve someone
+        }
 
     }
 }

@@ -2,7 +2,7 @@ package internal.andreiva.concursmotociclism.gui;
 
 import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.domain.Racer;
-import internal.andreiva.concursmotociclism.service.Service;
+import internal.andreiva.concursmotociclism.service.AbstractService;
 import internal.andreiva.concursmotociclism.utils.Event;
 import internal.andreiva.concursmotociclism.utils.EventType;
 import internal.andreiva.concursmotociclism.utils.Observer;
@@ -46,7 +46,7 @@ public class GuiAdminController extends AbstractGuiController implements Observe
 
 
     @Override
-    public void setService(Service service)
+    public void setService(AbstractService service)
     {
         super.setService(service);
         service.addObserver(this);
@@ -55,21 +55,12 @@ public class GuiAdminController extends AbstractGuiController implements Observe
         setUpSearchField();
     }
 
-    @Override
-    public void update(Event event)
-    {
-        if (event.type() == EventType.RaceRegistration)
-        {
-            createTabs();
-            racerTable.getItems().clear();
-            teamSearchFieldUpdated();
-        }
-    }
 
     private void setUpSearchField()
     {
         PauseTransition pause = new PauseTransition(Duration.millis(350));
-        teamSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+        teamSearchField.textProperty().addListener((observable, oldValue, newValue) ->
+        {
             pause.setOnFinished(event -> teamSearchFieldUpdated());
             pause.playFromStart();
         });
@@ -77,9 +68,11 @@ public class GuiAdminController extends AbstractGuiController implements Observe
 
     private void setUpRacerTable()
     {
-        class racerClassesFactory implements Callback<TableColumn.CellDataFeatures<Racer, String>, ObservableValue<String>> {
+        class racerClassesFactory implements Callback<TableColumn.CellDataFeatures<Racer, String>, ObservableValue<String>>
+        {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Racer, String> param) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Racer, String> param)
+            {
                 var classes = service.getRacerClasses(param.getValue().getId());
                 return new SimpleStringProperty(classes.toString());
             }
@@ -108,9 +101,11 @@ public class GuiAdminController extends AbstractGuiController implements Observe
 
     private Node createPage(int pageIndex)
     {
-        class racersNoFactory implements Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>> {
+        class racersNoFactory implements Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>>
+        {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> param) {
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> param)
+            {
                 return new SimpleIntegerProperty(service.getRacersCountForRace(param.getValue().getId())).asObject();
             }
         }
@@ -129,8 +124,7 @@ public class GuiAdminController extends AbstractGuiController implements Observe
             var races = StreamSupport.stream(service.getRacesByClass(raceClasses.get(pageIndex)).spliterator(), false).toList();
             table.getColumns().setAll(List.of(nameColumn, racersNoColumn));
             table.setItems(FXCollections.observableArrayList(races));
-        }
-        else
+        } else
         {
             TableColumn<Race, String> nameColumn = new TableColumn<>("Nume");
             nameColumn.setPrefWidth(190);
@@ -158,8 +152,7 @@ public class GuiAdminController extends AbstractGuiController implements Observe
         {
             racerTable.setVisible(false);
             racesTabPane.setVisible(true);
-        }
-        else
+        } else
         {
             racerTable.setVisible(true);
             racesTabPane.setVisible(false);
@@ -185,9 +178,18 @@ public class GuiAdminController extends AbstractGuiController implements Observe
 
     public void handleLogout()
     {
-        service.removeObserver(this);
         childStages.forEach(Stage::close);
+        service.removeObserver(this);
         var currentStage = (Stage) racesTabPane.getScene().getWindow();
         currentStage.close();
+    }
+
+    @Override
+    public void update(Event event)
+    {
+        if (event.type().equals(EventType.RaceRegistration))
+        {
+            createTabs();
+        }
     }
 }

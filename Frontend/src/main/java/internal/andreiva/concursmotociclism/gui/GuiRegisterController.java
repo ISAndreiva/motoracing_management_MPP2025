@@ -1,6 +1,6 @@
 package internal.andreiva.concursmotociclism.gui;
 
-import internal.andreiva.concursmotociclism.service.Service;
+import internal.andreiva.concursmotociclism.service.AbstractService;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -20,7 +20,7 @@ public class GuiRegisterController extends AbstractGuiController
     private ChoiceBox<String> raceComboBox;
 
     @Override
-    public void setService(Service service)
+    public void setService(AbstractService service)
     {
         super.setService(service);
         service.getAllTeams().forEach(team -> teamComboBox.getItems().add(team.getName()));
