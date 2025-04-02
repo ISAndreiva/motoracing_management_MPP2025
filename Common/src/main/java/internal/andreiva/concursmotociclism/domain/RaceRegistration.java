@@ -3,24 +3,24 @@ package internal.andreiva.concursmotociclism.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public class RaceRegistration extends internal.andreiva.concursmotociclism.domain.Entity<UUID>
+public class RaceRegistration extends Entity<UUID>
 {
-    private final internal.andreiva.concursmotociclism.domain.Race race;
+    private final Race race;
     private final Racer racer;
 
-    public RaceRegistration(UUID uuid, internal.andreiva.concursmotociclism.domain.Race race, internal.andreiva.concursmotociclism.domain.Racer racer)
+    public RaceRegistration(UUID uuid, Race race, Racer racer)
     {
         super(uuid);
         this.race = race;
         this.racer = racer;
     }
 
-    public internal.andreiva.concursmotociclism.domain.Race getRace()
+    public Race getRace()
     {
         return race;
     }
 
-    public internal.andreiva.concursmotociclism.domain.Racer getRacer()
+    public Racer getRacer()
     {
         return racer;
     }

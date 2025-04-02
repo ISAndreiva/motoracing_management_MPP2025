@@ -3,7 +3,7 @@ package internal.andreiva.concursmotociclism.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Race extends internal.andreiva.concursmotociclism.domain.Entity<UUID>
+public class Race extends Entity<UUID>
 {
     private final int raceClass;
     private final String raceName;

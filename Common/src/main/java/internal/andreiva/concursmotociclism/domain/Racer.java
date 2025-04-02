@@ -3,13 +3,13 @@ package internal.andreiva.concursmotociclism.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Racer extends internal.andreiva.concursmotociclism.domain.Entity<UUID>
+public class Racer extends Entity<UUID>
 {
     private final String name;
     private Team team;
     private final String CNP;
 
-    public Racer(UUID id, String name, internal.andreiva.concursmotociclism.domain.Team team, String CNP)
+    public Racer(UUID id, String name, Team team, String CNP)
     {
         super(id);
         this.name = name;
@@ -22,7 +22,7 @@ public class Racer extends internal.andreiva.concursmotociclism.domain.Entity<UU
         return name;
     }
 
-    public internal.andreiva.concursmotociclism.domain.Team getTeam()
+    public Team getTeam()
     {
         return team;
     }
@@ -32,7 +32,7 @@ public class Racer extends internal.andreiva.concursmotociclism.domain.Entity<UU
         return CNP;
     }
 
-    public void setTeam(internal.andreiva.concursmotociclism.domain.Team team)
+    public void setTeam(Team team)
     {
         this.team = team;
     }

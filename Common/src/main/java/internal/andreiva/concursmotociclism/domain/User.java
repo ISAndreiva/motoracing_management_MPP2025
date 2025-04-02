@@ -3,7 +3,7 @@ package internal.andreiva.concursmotociclism.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User extends internal.andreiva.concursmotociclism.domain.Entity<UUID>
+public class User extends Entity<UUID>
 {
     private final String username;
     private final String passwordHash;

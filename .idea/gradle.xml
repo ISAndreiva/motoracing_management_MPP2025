@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/Backend" />
             <option value="$PROJECT_DIR$/Common" />
             <option value="$PROJECT_DIR$/Frontend" />
+            <option value="$PROJECT_DIR$/Network" />
           </set>
         </option>
       </GradleProjectSettings>

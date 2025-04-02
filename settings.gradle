@@ -2,4 +2,5 @@ rootProject.name = 'ConcorsMotociclism'
 include 'Backend'
 include 'Frontend'
 include 'Common'
+include 'Network'
 
