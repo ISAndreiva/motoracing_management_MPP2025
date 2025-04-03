@@ -2,10 +2,7 @@ package internal.andreiva.concursmotociclism.gui;
 
 import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.domain.Racer;
-import internal.andreiva.concursmotociclism.service.AbstractService;
-import internal.andreiva.concursmotociclism.utils.Event;
-import internal.andreiva.concursmotociclism.utils.EventType;
-import internal.andreiva.concursmotociclism.utils.Observer;
+import internal.andreiva.concursmotociclism.service.ServiceInterface;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class GuiAdminController extends AbstractGuiController implements Observer
+public class GuiAdminController extends AbstractGuiController
 {
     @FXML
     private TabPane racesTabPane;
@@ -46,10 +43,9 @@ public class GuiAdminController extends AbstractGuiController implements Observe
 
 
     @Override
-    public void setService(AbstractService service)
+    public void setService(ServiceInterface service)
     {
         super.setService(service);
-        service.addObserver(this);
         createTabs();
         setUpRacerTable();
         setUpSearchField();
@@ -179,17 +175,16 @@ public class GuiAdminController extends AbstractGuiController implements Observe
     public void handleLogout()
     {
         childStages.forEach(Stage::close);
-        service.removeObserver(this);
         var currentStage = (Stage) racesTabPane.getScene().getWindow();
         currentStage.close();
     }
 
-    @Override
-    public void update(Event event)
-    {
-        if (event.type().equals(EventType.RaceRegistration))
-        {
-            createTabs();
-        }
-    }
+//    @Override
+//    public void update(Event event)
+//    {
+//        if (event.type().equals(EventType.RaceRegistration))
+//        {
+//            createTabs();
+//        }
+//    }
 }

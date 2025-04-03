@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Set;
 import java.util.UUID;
 
-public class Service extends AbstractService
+public class Service implements ServiceInterface
 {
     private final UserController userController;
     private final TeamController teamController;
@@ -109,7 +109,7 @@ public class Service extends AbstractService
     @Override
     public void addRaceRegistration(String racerName, String racerCNP, String teamName, String raceName)
     {
-            logger.info("Adding race registration for {} in race {}", racerName, raceName);
+        logger.info("Adding race registration for {} in race {}", racerName, raceName);
         var racer = racerController.getRacerByCNP(racerCNP);
         if (racer == null)
         {
