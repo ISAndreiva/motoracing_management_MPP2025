@@ -1,38 +1,39 @@
 package internal.andreiva.concursmotociclism.dto;
 
-import internal.andreiva.concursmotociclism.domain.RaceRegistration;
+import java.io.Serializable;
 
-import java.util.UUID;
-
-public class RaceRegistrationDTO extends EntityDTO<UUID>
+public class RaceRegistrationDTO implements Serializable
 {
-    private final RaceDTO race;
-    private final RacerDTO racer;
+    private final String racerName;
+    private final String racerCNP;
+    private final String teamName;
+    private final String raceName;
 
-    public RaceRegistrationDTO(UUID uuid, RaceDTO race, RacerDTO racer)
+    public RaceRegistrationDTO(String racerName, String racerCNP, String teamName, String raceName)
     {
-        super(uuid);
-        this.race = race;
-        this.racer = racer;
+        this.racerName = racerName;
+        this.racerCNP = racerCNP;
+        this.teamName = teamName;
+        this.raceName = raceName;
     }
 
-    public RaceDTO getRace()
+    public String getRacerName()
     {
-        return race;
+        return racerName;
     }
 
-    public RacerDTO getRacer()
+    public String getRacerCNP()
     {
-        return racer;
+        return racerCNP;
     }
 
-    public static RaceRegistrationDTO fromRaceRegistration(RaceRegistration raceRegistration)
+    public String getTeamName()
     {
-        return new RaceRegistrationDTO(raceRegistration.getId(), RaceDTO.fromRace(raceRegistration.getRace()), RacerDTO.fromRacer(raceRegistration.getRacer()));
+        return teamName;
     }
 
-    public RaceRegistration toRaceRegistration()
+    public String getRaceName()
     {
-        return new RaceRegistration(getId(), race.toRace(), getRacer().toRacer());
+        return raceName;
     }
 }
