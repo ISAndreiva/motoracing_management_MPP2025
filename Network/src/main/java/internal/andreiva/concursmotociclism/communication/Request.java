@@ -22,4 +22,13 @@ public class Request implements Serializable
     {
         return data;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Request{" +
+                "requestType=" + requestType +
+                ", data=" + data +
+                '}';
+    }
 }

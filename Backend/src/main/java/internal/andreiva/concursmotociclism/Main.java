@@ -33,7 +33,7 @@ public class Main
 
         var service = new Service(userDbRepository, teamDbRepository, raceDbRepository, racerDbRepository, raceRegistrationDbRepository);
 
-        if (!Objects.equals(properties.getProperty("server.port"), ""))
+        if (!properties.getProperty("server.port").isEmpty())
         {
             server = new ConcurrentServer((Integer.parseInt(properties.getProperty("server.port"))), service);
         }

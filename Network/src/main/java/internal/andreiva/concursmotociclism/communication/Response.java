@@ -22,4 +22,13 @@ public class Response implements Serializable
     {
         return data;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Response{" +
+                "responseType=" + responseType +
+                ", data=" + data +
+                '}';
+    }
 }

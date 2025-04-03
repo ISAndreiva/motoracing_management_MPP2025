@@ -1,6 +1,8 @@
 package internal.andreiva.concursmotociclism.dto;
 
-public class UserCrediantialsDTO
+import java.io.Serializable;
+
+public class UserCrediantialsDTO implements Serializable
 {
     private final String username;
     private final String password;

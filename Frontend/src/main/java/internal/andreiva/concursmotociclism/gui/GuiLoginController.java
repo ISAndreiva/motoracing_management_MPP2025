@@ -20,22 +20,29 @@ public class GuiLoginController extends AbstractGuiController
 
     public void handleLogin(ActionEvent actionEvent)
     {
-        if (!usernameTextField.getText().isEmpty())
+        try
         {
-            if (service.checkUserExists(usernameTextField.getText()))
+            if (!usernameTextField.getText().isEmpty())
             {
-                if (service.checkUserPassword(usernameTextField.getText(), PasswordHasher.hashPassword(passwordTextField.getText(), usernameTextField.getText())))
-                    GuiViewFactory.adminView();
-                else
+                if (service.checkUserExists(usernameTextField.getText()))
                 {
-                    errorLabel.setText("Incorrect password!");
+                    if (service.checkUserPassword(usernameTextField.getText(), PasswordHasher.hashPassword(passwordTextField.getText(), usernameTextField.getText())))
+                        GuiViewFactory.adminView();
+                    else
+                    {
+                        errorLabel.setText("Username or password is wrong!");
+                        errorLabel.setStyle("-fx-text-fill: red");
+                    }
+                } else
+                {
+                    errorLabel.setText("Username or password is wrong!");
                     errorLabel.setStyle("-fx-text-fill: red");
                 }
-            } else
-            {
-                errorLabel.setText("Username does not exist!");
-                errorLabel.setStyle("-fx-text-fill: red");
             }
+        } catch (Exception e)
+        {
+            System.out.println(e);
+            errorLabel.setText(e.getMessage());
         }
     }
 }

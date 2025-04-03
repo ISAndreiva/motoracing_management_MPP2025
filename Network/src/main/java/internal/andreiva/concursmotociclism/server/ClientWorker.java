@@ -9,6 +9,7 @@ import internal.andreiva.concursmotociclism.service.ServiceInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -55,12 +56,17 @@ public class ClientWorker implements Runnable
         {
             try
             {
+
                 Request request = (Request) input.readObject();
                 logger.debug("Received request: {}", request);
                 Response response = handleRequest(request);
                 logger.debug("Sending response: {}", response);
                 sendResponse(response);
-            } catch (IOException e)
+            }
+            catch (EOFException e) {
+                break;
+            }
+            catch (IOException e)
             {
                 logger.error(e);
                 connected = false;
@@ -68,15 +74,23 @@ public class ClientWorker implements Runnable
             {
                 logger.error(e);
             }
-            try
-            {
-                input.close();
-                output.close();
-                socket.close();
-            } catch (IOException e)
-            {
-                logger.error("Oh no, failed to close socket on exit, anyway. Here is why: ", e);
-            }
+        }
+        logger.info("Client disconnected");
+        try
+        {
+            Thread.sleep(1000);
+        } catch (InterruptedException e)
+        {
+            logger.error(e);
+        }
+        try
+        {
+            input.close();
+            output.close();
+            socket.close();
+        } catch (Exception e)
+        {
+            logger.error("Oh no, failed to close socket on exit, anyway. Here is why: ", e);
         }
     }
 
@@ -135,7 +149,8 @@ public class ClientWorker implements Runnable
         try
         {
             var raceClass = (Integer) request.data();
-            var races = StreamSupport.stream(service.getRacesByClass(raceClass).spliterator(), false).toArray();
+            var races = new ArrayList<RaceDTO>();
+            service.getRacesByClass(raceClass).forEach(r -> races.add(RaceDTO.fromRace(r)));
             return new Response(ResponseType.GetRacesByClass, races);
         } catch (Exception e)
         {
@@ -148,7 +163,7 @@ public class ClientWorker implements Runnable
     {
         try
         {
-            var classes = StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toArray();
+            var classes = StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toList();
             return new Response(ResponseType.GetUsedRaceClasses, classes);
         } catch (Exception e)
         {
@@ -191,7 +206,7 @@ public class ClientWorker implements Runnable
             var teamId = (UUID) request.data();
             var racers = new ArrayList<RacerDTO>();
             service.getRacersByTeam(teamId).forEach(r -> racers.add(RacerDTO.fromRacer(r)));
-            return new Response(ResponseType.GetRacersCountForRace, racers);
+            return new Response(ResponseType.GetRacersByTeam, racers);
         } catch (Exception e)
         {
             logger.error(e);
