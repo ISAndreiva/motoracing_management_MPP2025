@@ -3,6 +3,7 @@ package internal.andreiva.concursmotociclism;
 import internal.andreiva.concursmotociclism.repository.db.*;
 import internal.andreiva.concursmotociclism.server.AbstractServer;
 import internal.andreiva.concursmotociclism.server.ConcurrentServer;
+import internal.andreiva.concursmotociclism.server.ObservableServiceWrapper;
 import internal.andreiva.concursmotociclism.service.Service;
 
 import java.io.FileReader;
@@ -32,14 +33,15 @@ public class Main
         var raceRegistrationDbRepository = new RaceRegistrationDbRepository(properties, racerDbRepository, raceDbRepository);
 
         var service = new Service(userDbRepository, teamDbRepository, raceDbRepository, racerDbRepository, raceRegistrationDbRepository);
+        var observableService = new ObservableServiceWrapper(service);
 
         if (!properties.getProperty("server.port").isEmpty())
         {
-            server = new ConcurrentServer((Integer.parseInt(properties.getProperty("server.port"))), service);
+            server = new ConcurrentServer((Integer.parseInt(properties.getProperty("server.port"))), observableService);
         }
         else
         {
-            server = new ConcurrentServer(service);
+            server = new ConcurrentServer(observableService);
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() ->

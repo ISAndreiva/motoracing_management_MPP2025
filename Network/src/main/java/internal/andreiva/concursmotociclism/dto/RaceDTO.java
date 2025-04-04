@@ -17,16 +17,6 @@ public class RaceDTO extends EntityDTO<UUID>
         this.raceName = raceName;
     }
 
-    public int getRaceClass()
-    {
-        return raceClass;
-    }
-
-    public String getRaceName()
-    {
-        return raceName;
-    }
-
     public static RaceDTO fromRace(Race race)
     {
         return new RaceDTO(race.getId(), race.getRaceClass(), race.getRaceName());
@@ -34,6 +24,6 @@ public class RaceDTO extends EntityDTO<UUID>
 
     public Race toRace()
     {
-        return new Race(getId(), getRaceClass(), getRaceName());
+        return new Race(getId(), raceClass, raceName);
     }
 }

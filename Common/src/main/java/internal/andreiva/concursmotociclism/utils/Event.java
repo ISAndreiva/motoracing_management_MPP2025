@@ -1,5 +1,7 @@
 package internal.andreiva.concursmotociclism.utils;
 
-public record Event(EventType type)
+import java.io.Serializable;
+
+public record Event(EventType type, Object data) implements Serializable
 {
 }

@@ -32,4 +32,6 @@ public interface ServiceInterface
     Iterable<Race> getAllRaces();
 
     void addRaceRegistration(String racerName, String racerCNP, String teamName, String raceName);
+
+    Race getRaceByName(String raceName);
 }

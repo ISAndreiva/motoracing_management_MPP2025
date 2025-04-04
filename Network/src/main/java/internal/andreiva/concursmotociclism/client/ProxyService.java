@@ -2,12 +2,16 @@ package internal.andreiva.concursmotociclism.client;
 
 import internal.andreiva.concursmotociclism.communication.Request;
 import internal.andreiva.concursmotociclism.communication.RequestType;
+import internal.andreiva.concursmotociclism.communication.Response;
 import internal.andreiva.concursmotociclism.communication.ResponseType;
 import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.domain.Racer;
 import internal.andreiva.concursmotociclism.domain.Team;
 import internal.andreiva.concursmotociclism.dto.*;
 import internal.andreiva.concursmotociclism.service.ServiceInterface;
+import internal.andreiva.concursmotociclism.utils.Event;
+import internal.andreiva.concursmotociclism.utils.EventType;
+import internal.andreiva.concursmotociclism.utils.Observer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ import java.util.UUID;
 
 public class ProxyService extends AbstractProxyService implements ServiceInterface
 {
+    Observer guiController = null;
+
     public ProxyService(String host, int port)
     {
         super(host, port);
@@ -25,6 +31,21 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
     public ProxyService()
     {
         super();
+    }
+
+    @Override
+    protected void handleUpdate(Response response)
+    {
+        logger.info("Handling update: {}", response.toString());
+        var event = (Event) response.data();
+        if (event.type() == EventType.RaceRegistration)
+            if (guiController != null)
+                guiController.update(event.type(), ((RaceDTO) event.data()).toRace());
+    }
+
+    public void setGuiController(Observer guiController)
+    {
+        this.guiController = guiController;
     }
 
     @Override
@@ -54,6 +75,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         } catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetRacesByClass, raceClass));
         var response = readResponse();
@@ -76,6 +98,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         } catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetUsedRaceClasses, null));
         var response = readResponse();
@@ -95,6 +118,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         } catch (IOException e)
         {
             logger.error(e);
+            return -1;
         }
         sendRequest(new Request(RequestType.GetRacersCountForRace, raceId));
         var response = readResponse();
@@ -129,6 +153,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetRacersByTeam, teamId));
         var response = readResponse();
@@ -151,6 +176,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetRacerClasses, racerId));
         var response = readResponse();
@@ -170,6 +196,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetTeamsByPartialName, name));
         var response = readResponse();
@@ -192,6 +219,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetAllTeams, null));
         var response = readResponse();
@@ -214,6 +242,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return;
         }
         var racerDTO = RacerDTO.fromRacer(racer);
         sendRequest(new Request(RequestType.AddRacer, racerDTO));
@@ -233,6 +262,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return null;
         }
         sendRequest(new Request(RequestType.GetAllRaces, null));
         var response = readResponse();
@@ -255,6 +285,7 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         }catch (IOException e)
         {
             logger.error(e);
+            return;
         }
         var raceRegistrationDTO = new RaceRegistrationDTO(racerName, racerCNP, teamName, raceName);
         sendRequest(new Request(RequestType.AddRaceRegistration, raceRegistrationDTO));
@@ -263,5 +294,25 @@ public class ProxyService extends AbstractProxyService implements ServiceInterfa
         {
             logger.error("Error adding race registration: {}", response.data());
         }
+    }
+
+    @Override
+    public Race getRaceByName(String raceName)
+    {
+        try
+        {
+            testConnection();
+        }catch (IOException e)
+        {
+            logger.error(e);
+            return null;
+        }
+        sendRequest(new Request(RequestType.GetRaceByName, raceName));
+        var response = readResponse();
+        if (response.type() == ResponseType.GetRaceByName)
+        {
+            return ((RaceDTO) response.data()).toRace();
+        }
+        return null;
     }
 }

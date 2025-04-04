@@ -1,8 +1,11 @@
 package internal.andreiva.concursmotociclism.gui;
 
+import internal.andreiva.concursmotociclism.client.ProxyService;
 import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.domain.Racer;
 import internal.andreiva.concursmotociclism.service.ServiceInterface;
+import internal.andreiva.concursmotociclism.utils.EventType;
+import internal.andreiva.concursmotociclism.utils.Observer;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,10 +20,12 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class GuiAdminController extends AbstractGuiController
+public class GuiAdminController extends AbstractGuiController implements Observer
 {
     @FXML
     private TabPane racesTabPane;
@@ -39,6 +44,8 @@ public class GuiAdminController extends AbstractGuiController
 
     private List<Integer> raceClasses;
 
+    private Dictionary<Integer, TableView<Race>> racesTables;
+
     private final List<Stage> childStages = new ArrayList<>();
 
 
@@ -46,6 +53,8 @@ public class GuiAdminController extends AbstractGuiController
     public void setService(ServiceInterface service)
     {
         super.setService(service);
+        if (service instanceof ProxyService)
+            ((ProxyService) service).setGuiController(this);
         createTabs();
         setUpRacerTable();
         setUpSearchField();
@@ -82,6 +91,8 @@ public class GuiAdminController extends AbstractGuiController
         var pos = racesTabPane.getSelectionModel().getSelectedIndex();
         raceClasses = StreamSupport.stream(service.getUsedRaceClasses().spliterator(), false).toList();
         racesTabPane.getTabs().clear();
+        racesTables = new Hashtable<>();
+
         var tab = new Tab("Toate");
         tab.setContent(createPage(-1));
         racesTabPane.getTabs().add(tab);
@@ -119,7 +130,8 @@ public class GuiAdminController extends AbstractGuiController
 
             var races = StreamSupport.stream(service.getRacesByClass(raceClasses.get(pageIndex)).spliterator(), false).toList();
             table.getColumns().setAll(List.of(nameColumn, racersNoColumn));
-            table.setItems(FXCollections.observableArrayList(races));
+            var list = FXCollections.observableArrayList(races);
+            table.setItems(list);
         } else
         {
             TableColumn<Race, String> nameColumn = new TableColumn<>("Nume");
@@ -135,9 +147,10 @@ public class GuiAdminController extends AbstractGuiController
 
             var races = StreamSupport.stream(service.getAllRaces().spliterator(), false).toList();
             table.getColumns().setAll(List.of(nameColumn, classColumn, racersNoColumn));
-            table.setItems(FXCollections.observableArrayList(races));
+            var list = FXCollections.observableArrayList(races);
+            table.setItems(list);
         }
-
+        racesTables.put(pageIndex, table);
         return table;
     }
 
@@ -175,16 +188,25 @@ public class GuiAdminController extends AbstractGuiController
     public void handleLogout()
     {
         childStages.forEach(Stage::close);
+        if (service instanceof ProxyService)
+        {
+            ((ProxyService) service).setGuiController(null);
+            ((ProxyService) service).closeConnection();
+        }
         var currentStage = (Stage) racesTabPane.getScene().getWindow();
         currentStage.close();
     }
 
-//    @Override
-//    public void update(Event event)
-//    {
-//        if (event.type().equals(EventType.RaceRegistration))
-//        {
-//            createTabs();
-//        }
-//    }
+    @Override
+    public void update(EventType type, Object data)
+    {
+        if (type.equals(EventType.RaceRegistration))
+        {
+            var race = (Race) data;
+            var index = raceClasses.indexOf(race.getRaceClass());
+            racesTables.get(index).refresh();
+            racesTables.get(-1).refresh();
+        }
+    }
+
 }

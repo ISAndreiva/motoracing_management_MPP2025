@@ -2,6 +2,7 @@ package internal.andreiva.concursmotociclism.client;
 
 import internal.andreiva.concursmotociclism.communication.Request;
 import internal.andreiva.concursmotociclism.communication.Response;
+import internal.andreiva.concursmotociclism.communication.ResponseType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,15 +65,22 @@ public abstract class AbstractProxyService
     private class ReaderThread implements Runnable{
         public void run() {
             logger.info("Starting reader thread");
-            while(connected){
-                try {
+            while(connected)
+            {
+                try
+                {
                     var response = input.readObject();
                     logger.info("Received response: {}", response.toString());
-                    qresponses.put((Response) response);
-                }catch (EOFException ignored)
-                {
-                }
-                catch (Exception e)
+                    if (((Response) response).type() == ResponseType.Update)
+                    {
+                        handleUpdate((Response) response);
+                    }
+                    else
+                    {
+                        qresponses.put((Response) response);
+                    }
+                } catch (EOFException ignored)  {
+                } catch (Exception e)
                 {
                     logger.error(e);
                 }
@@ -93,6 +101,8 @@ public abstract class AbstractProxyService
             }
         }
     }
+
+    protected abstract void handleUpdate(Response response);
 
     protected void sendRequest(Request request)
     {

@@ -18,25 +18,7 @@ public class RacerDTO extends EntityDTO<UUID>
         this.CNP = CNP;
     }
 
-    public String getName()
-    {
-        return name;
-    }
 
-    public TeamDTO getTeam()
-    {
-        return team;
-    }
-
-    public String getCNP()
-    {
-        return CNP;
-    }
-
-    public void setTeam(TeamDTO team)
-    {
-        this.team = team;
-    }
 
     public static RacerDTO fromRacer(Racer racer)
     {
@@ -45,6 +27,6 @@ public class RacerDTO extends EntityDTO<UUID>
 
     public Racer toRacer()
     {
-        return new Racer(getId(), getName(), team.toTeam(), getCNP());
+        return new Racer(getId(), name, team.toTeam(), CNP);
     }
 }

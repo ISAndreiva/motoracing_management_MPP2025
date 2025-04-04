@@ -15,11 +15,6 @@ public class TeamDTO extends EntityDTO<UUID>
         this.name = name;
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
     public static TeamDTO fromTeam(Team team)
     {
         return new TeamDTO(team.getId(), team.getName());
@@ -27,6 +22,6 @@ public class TeamDTO extends EntityDTO<UUID>
 
     public Team toTeam()
     {
-        return new Team(getId(), getName());
+        return new Team(getId(), name);
     }
 }

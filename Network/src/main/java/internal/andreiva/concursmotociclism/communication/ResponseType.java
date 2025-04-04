@@ -12,4 +12,6 @@ public enum ResponseType
     GetTeamsByPartialName,
     GetAllTeams,
     GetAllRaces,
+    GetRaceByName,
+    Update,
 }

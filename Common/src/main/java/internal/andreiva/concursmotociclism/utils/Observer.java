@@ -2,5 +2,5 @@ package internal.andreiva.concursmotociclism.utils;
 
 public interface Observer
 {
-    void update(Event event);
+    void update(EventType type, Object data);
 }

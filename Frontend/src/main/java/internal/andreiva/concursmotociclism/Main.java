@@ -35,6 +35,5 @@ public class Main
 
         GuiViewFactory.setService((ServiceInterface) service);
         GuiViewFactory.launch();
-        service.closeConnection();
     }
 }

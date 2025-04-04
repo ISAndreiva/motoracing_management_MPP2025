@@ -4,8 +4,12 @@ package internal.andreiva.concursmotociclism.server;
 import internal.andreiva.concursmotociclism.communication.Request;
 import internal.andreiva.concursmotociclism.communication.Response;
 import internal.andreiva.concursmotociclism.communication.ResponseType;
+import internal.andreiva.concursmotociclism.domain.Race;
 import internal.andreiva.concursmotociclism.dto.*;
 import internal.andreiva.concursmotociclism.service.ServiceInterface;
+import internal.andreiva.concursmotociclism.utils.Event;
+import internal.andreiva.concursmotociclism.utils.EventType;
+import internal.andreiva.concursmotociclism.utils.Observer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +23,7 @@ import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 
-public class ClientWorker implements Runnable
+public class ClientWorker implements Runnable, Observer
 {
     protected final static Logger logger = LogManager.getLogger();
     private final ServiceInterface service;
@@ -32,6 +36,9 @@ public class ClientWorker implements Runnable
     public ClientWorker(ServiceInterface service, Socket socket)
     {
         this.service = service;
+        if (service instanceof ObservableServiceWrapper)
+            ((ObservableServiceWrapper) service).registerObserver(this);
+
         this.socket = socket;
         ObjectInputStream inputTemp = null;
         ObjectOutputStream outputTemp = null;
@@ -56,7 +63,6 @@ public class ClientWorker implements Runnable
         {
             try
             {
-
                 Request request = (Request) input.readObject();
                 logger.debug("Received request: {}", request);
                 Response response = handleRequest(request);
@@ -88,6 +94,8 @@ public class ClientWorker implements Runnable
             input.close();
             output.close();
             socket.close();
+            if (service instanceof ObservableServiceWrapper)
+                ((ObservableServiceWrapper) service).unregisterObserver(this);
         } catch (Exception e)
         {
             logger.error("Oh no, failed to close socket on exit, anyway. Here is why: ", e);
@@ -301,5 +309,32 @@ public class ClientWorker implements Runnable
         }
     }
 
+    private Response handleGetRaceByName(Request request)
+    {
+        try
+        {
+            var raceName = (String) request.data();
+            var race = service.getRaceByName(raceName);
+            if (race == null)
+                return new Response(ResponseType.Error, null);
+            return new Response(ResponseType.GetRaceByName, RaceDTO.fromRace(race));
+        } catch (Exception e)
+        {
+            logger.error(e);
+            return new Response(ResponseType.Error, e.getMessage());
+        }
+    }
 
+    @Override
+    public void update(EventType type, Object data)
+    {
+        try
+        {
+            logger.info("Sending update event");
+            sendResponse(new Response(ResponseType.Update, new Event(type, RaceDTO.fromRace((Race) data))));
+        } catch (Exception e)
+        {
+            logger.error(e);
+        }
+    }
 }

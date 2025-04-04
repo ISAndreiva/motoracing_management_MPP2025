@@ -120,4 +120,11 @@ public class Service implements ServiceInterface
         raceRegistrationController.addRaceRegistration(new RaceRegistration(UUID.randomUUID(), race, racer));
     }
 
+    @Override
+    public Race getRaceByName(String raceName)
+    {
+        logger.info("Getting race by name {}", raceName);
+        return raceController.getRaceByName(raceName);
+    }
+
 }

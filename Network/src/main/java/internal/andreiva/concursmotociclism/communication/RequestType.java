@@ -13,5 +13,6 @@ public enum RequestType
     GetAllTeams,
     AddRacer,
     GetAllRaces,
-    AddRaceRegistration
+    AddRaceRegistration,
+    GetRaceByName,
 }
