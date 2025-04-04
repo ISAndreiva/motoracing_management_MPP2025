@@ -13,9 +13,6 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-
     implementation project(':Common')
     implementation project(':Network')
     implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
@@ -28,8 +25,4 @@ javafx {
 
 application {
     mainClass = 'internal.andreiva.concursmotociclism.Main'
-}
-
-test {
-    useJUnitPlatform()
 }

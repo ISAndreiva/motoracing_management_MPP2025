@@ -8,7 +8,6 @@ import internal.andreiva.concursmotociclism.service.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Properties;
 
 public class Main
@@ -45,9 +44,7 @@ public class Main
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
-        {
-                server.stop();
-        }));
+                server.stop()));
         server.start();
     }
 }

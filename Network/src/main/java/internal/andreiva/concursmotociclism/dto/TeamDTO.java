@@ -1,6 +1,5 @@
 package internal.andreiva.concursmotociclism.dto;
 
-import internal.andreiva.concursmotociclism.domain.Entity;
 import internal.andreiva.concursmotociclism.domain.Team;
 
 import java.util.UUID;

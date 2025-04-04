@@ -38,7 +38,7 @@ public class GuiViewFactory extends Application
 
     public static void loginView()
     {
-        stage.setScene(createScene("concursmotociclism/gui/loginView.fxml", null, null));
+        stage.setScene(createScene("concursmotociclism/gui/loginView.fxml", null));
         stage.setTitle("Concurs Motociclism");
         stage.show();
     }
@@ -46,7 +46,7 @@ public class GuiViewFactory extends Application
     public static void adminView()
     {
         Stage stage = new Stage();
-        stage.setScene(createScene("concursmotociclism/gui/adminView.fxml", null, null));
+        stage.setScene(createScene("concursmotociclism/gui/adminView.fxml", null));
         stage.setTitle("Concurs Motociclism");
         stage.show();
     }
@@ -54,13 +54,13 @@ public class GuiViewFactory extends Application
     public static Stage registerView()
     {
         Stage stage = new Stage();
-        stage.setScene(createScene("concursmotociclism/gui/registerView.fxml", null, null));
+        stage.setScene(createScene("concursmotociclism/gui/registerView.fxml", null));
         stage.setTitle("Concurs Motociclism");
         stage.show();
         return stage;
     }
 
-    private static Scene createScene(String fxml, String css, Object parameter)
+    private static Scene createScene(String fxml, String css)
     {
         FXMLLoader fxmlLoader = new FXMLLoader(GuiViewFactory.class.getClassLoader().getResource(fxml));
         try

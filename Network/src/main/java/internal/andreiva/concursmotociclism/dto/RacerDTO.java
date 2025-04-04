@@ -7,7 +7,7 @@ import java.util.UUID;
 public class RacerDTO extends EntityDTO<UUID>
 {
     private final String name;
-    private TeamDTO team;
+    private final TeamDTO team;
     private final String CNP;
 
     public RacerDTO(UUID id, String name, TeamDTO team, String CNP)

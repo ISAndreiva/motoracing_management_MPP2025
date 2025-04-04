@@ -65,7 +65,7 @@ public class RacerDbRepository extends AbstractDbRepository<UUID, Racer> impleme
     public void update(Racer entity)
     {
         logger.traceEntry();
-        logger.info("Updating Racer with id:" + entity.getId());
+        logger.info("Updating Racer with id: {}", entity.getId());
         String sql = "UPDATE racer SET name = ?, team = ?, cnp = ? WHERE uuid = ?";
         try
         {

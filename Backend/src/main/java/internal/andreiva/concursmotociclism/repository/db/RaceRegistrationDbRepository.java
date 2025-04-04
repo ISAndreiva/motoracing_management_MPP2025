@@ -60,7 +60,7 @@ public class RaceRegistrationDbRepository extends AbstractDbRepository<UUID, Rac
     public void update(RaceRegistration entity)
     {
         logger.traceEntry();
-        logger.info("Updating RaceRegistration with id:" + entity.getId());
+        logger.info("Updating RaceRegistration with id: {}", entity.getId());
         String sql = "UPDATE raceregistration SET race = ?, racer = ? WHERE uuid = ?";
         try
         {

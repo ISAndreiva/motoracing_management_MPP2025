@@ -51,7 +51,7 @@ public class TeamDbRepository extends AbstractDbRepository<UUID, Team> implement
     public void update(Team entity)
     {
         logger.traceEntry();
-        logger.info("Updating team with id:" + entity.getId());
+        logger.info("Updating team with id: {}", entity.getId());
         String sql = "UPDATE team SET name = ? WHERE uuid = ?";
         try
         {

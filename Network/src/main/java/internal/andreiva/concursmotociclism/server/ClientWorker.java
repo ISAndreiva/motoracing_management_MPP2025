@@ -142,7 +142,7 @@ public class ClientWorker implements Runnable, Observer
     private Response handleCheckUserPassword(Request request)
     {
         var crediantials = (UserCrediantialsDTO) request.data();
-        if (service.checkUserPassword(crediantials.getUsername(), crediantials.getPassword()))
+        if (service.checkUserPassword(crediantials.username(), crediantials.password()))
         {
             return new Response(ResponseType.Ok, null);
         }
@@ -299,8 +299,8 @@ public class ClientWorker implements Runnable, Observer
         try
         {
             var raceRegistration = (RaceRegistrationDTO) request.data();
-            service.addRaceRegistration(raceRegistration.getRacerName(), raceRegistration.getRacerCNP(),
-                    raceRegistration.getTeamName(), raceRegistration.getRaceName());
+            service.addRaceRegistration(raceRegistration.racerName(), raceRegistration.racerCNP(),
+                    raceRegistration.teamName(), raceRegistration.raceName());
             return new Response(ResponseType.Ok, null);
         } catch (Exception e)
         {
