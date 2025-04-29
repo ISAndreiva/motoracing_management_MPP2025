@@ -1,0 +1,45 @@
+syntax="proto3";
+
+option java_multiple_files=true;
+option java_package="internal.andreiva.concursmotociclism";
+
+message RaceRpc {
+  string id = 1;
+  int32 raceClass = 2;
+  string raceName = 3;
+}
+
+message TeamRpc {
+  string id = 1;
+  string name = 2;
+}
+
+message RacerRpc{
+  string id = 1;
+  string name = 2;
+  TeamRpc team = 3;
+  string cnp = 4;
+}
+
+message RaceRegistrationRpc{
+  string id = 1;
+  RaceRpc race = 2;
+  RacerRpc racer = 3;
+}
+
+message UserRpc{
+  string id = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message EventRpc{
+  enum Type {
+    Unknown=0;
+    RaceRegistration=1;
+  }
+  Type type = 1;
+  oneof data{
+    RaceRpc race=2;
+  }
+}

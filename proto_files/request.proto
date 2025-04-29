@@ -1,0 +1,52 @@
+syntax="proto3";
+
+option java_multiple_files=true;
+option java_package="internal.andreiva.concursmotociclism";
+
+import 'domain.proto';
+
+message checkUserPasswordRequest {
+  UserRpc user = 1;
+}
+
+message getRacesByClassRequest {
+  int32 raceClass = 1;
+}
+
+message getRacersCountForRaceRequest{
+  string raceId = 1;
+}
+
+message checkUserExistsRequest{
+  string username = 1;
+}
+
+message getRacersByTeamRequest{
+  string teamId = 1;
+}
+
+message getRacerClassesRequest{
+  string racerId = 1;
+}
+
+message getTeamsByPartialNameRequest{
+  string partialName = 1;
+}
+
+message addRacerRequest{
+  RacerRpc racer = 1;
+}
+
+message addRaceRegistrationRequest{
+  string racerName = 1;
+  string racerCNP = 2;
+  string teamName = 3;
+  string raceName = 4;
+}
+
+message getRaceByNameRequest{
+  string raceName = 1;
+}
+
+message EmptyRequest{
+}

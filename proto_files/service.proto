@@ -1,0 +1,26 @@
+syntax="proto3";
+
+option java_multiple_files=true;
+option java_package="internal.andreiva.concursmotociclism";
+
+import 'domain.proto';
+import 'response.proto';
+import 'request.proto';
+
+
+service ProxyService {
+  rpc checkUserPassword(checkUserPasswordRequest) returns (checkUserPasswordResponse) {}
+  rpc getRacesByClass(getRacesByClassRequest) returns (getRacesByClassResponse) {}
+  rpc getUsedRaceClasses(EmptyRequest) returns (getUsedRaceClassesResponse) {}
+  rpc getRacersCountForRace(getRacersCountForRaceRequest) returns (getRacersCountForRaceResponse) {}
+  rpc checkUserExists(checkUserExistsRequest) returns (StatusResponse) {}
+  rpc getRacersByTeam(getRacersByTeamRequest) returns (getRacersByTeamResponse) {}
+  rpc getRacerClasses(getRacerClassesRequest) returns (getRacerClassesResponse) {}
+  rpc getTeamsByPartialName(getTeamsByPartialNameRequest) returns (getTeamsByPartialNameResponse) {}
+  rpc getAllTeams(EmptyRequest) returns (getAllTeamsResponse) {}
+  rpc addRacer(addRacerRequest) returns (StatusResponse) {}
+  rpc getAllRaces(EmptyRequest) returns (getAllRacesResponse) {}
+  rpc addRaceRegistration(addRaceRegistrationRequest) returns (StatusResponse) {}
+  rpc getRaceByName(getRaceByNameRequest) returns (getRaceByNameResponse) {}
+  rpc SubscribeToUpdates(EmptyRequest) returns (stream UpdateResponse);
+}

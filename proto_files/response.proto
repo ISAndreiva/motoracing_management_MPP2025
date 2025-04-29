@@ -1,0 +1,62 @@
+syntax="proto3";
+
+option java_multiple_files=true;
+option java_package="internal.andreiva.concursmotociclism";
+
+import 'domain.proto';
+
+message checkUserPasswordResponse{
+  bool passwordGood = 1;
+}
+
+message getRacesByClassResponse{
+  repeated RaceRpc races = 1;
+}
+
+message getUsedRaceClassesResponse{
+  repeated int32 raceClasses = 1;
+}
+
+message getRacersCountForRaceResponse{
+  int32 racersCount = 1;
+}
+
+message CheckUserExistsResponse {
+  bool exists = 1;
+}
+
+message getRacersByTeamResponse {
+  repeated RacerRpc racers = 1;
+}
+
+message getRacerClassesResponse {
+  repeated int32 classes = 1;
+}
+
+message getTeamsByPartialNameResponse {
+  repeated TeamRpc teams = 1;
+}
+
+message getAllTeamsResponse {
+  repeated TeamRpc teams = 1;
+}
+
+message getAllRacesResponse {
+  repeated RaceRpc races = 1;
+}
+
+message getRaceByNameResponse {
+  RaceRpc race = 1;
+}
+
+message StatusResponse {
+  enum Status {
+    OK = 0;
+    ERROR = 1;
+  }
+  Status status = 1;
+}
+
+message UpdateResponse {
+  EventRpc event = 1;
+}
